@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seecen.dao.TabRlyDao">
+  <resultMap id="BaseResultMap" type="com.seecen.domain.TabRly">
+    <result column="POST_ID" jdbcType="NUMERIC" property="postId" />
+    <result column="FLOOR_NUM" jdbcType="NUMERIC" property="floorNum" />
+    <result column="RLY_TIME" jdbcType="TIMESTAMP" property="rlyTime" />
+    <result column="RLY_CONTENT" jdbcType="VARCHAR" property="rlyContent" />
+    <result column="USERNAME" jdbcType="VARCHAR" property="username" />
+    <result column="REUSER_NAME" jdbcType="VARCHAR" property="reuserName" />
+    <result column="FACE_PATH" jdbcType="VARCHAR" property="facePath" />
+    <result column="VALID" jdbcType="CHAR" property="valid" />
+    <result column="USER_ID" jdbcType="NUMERIC" property="userId" />
+  </resultMap>
+  <!--<insert id="insert" parameterType="com.seecen.domain.TabRly">-->
+    <!--insert into TAB_RLY (POST_ID, FLOOR_NUM, RLY_TIME, -->
+      <!--RLY_CONTENT, USERNAME, REUSER_NAME, -->
+      <!--VALID, USER_ID)-->
+    <!--values (#{postId,jdbcType=DECIMAL}, #{floorNum,jdbcType=DECIMAL}, #{rlyTime,jdbcType=TIMESTAMP}, -->
+      <!--#{rlyContent,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{reuserName,jdbcType=VARCHAR}, -->
+      <!--#{valid,jdbcType=CHAR}, #{userId,jdbcType=DECIMAL})-->
+  <!--</insert>-->
+  <!--<insert id="insertSelective" parameterType="com.seecen.domain.TabRly">-->
+    <!--insert into TAB_RLY-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
+      <!--<if test="postId != null">-->
+        <!--POST_ID,-->
+      <!--</if>-->
+      <!--<if test="floorNum != null">-->
+        <!--FLOOR_NUM,-->
+      <!--</if>-->
+      <!--<if test="rlyTime != null">-->
+        <!--RLY_TIME,-->
+      <!--</if>-->
+      <!--<if test="rlyContent != null">-->
+        <!--RLY_CONTENT,-->
+      <!--</if>-->
+      <!--<if test="username != null">-->
+        <!--USERNAME,-->
+      <!--</if>-->
+      <!--<if test="reuserName != null">-->
+        <!--REUSER_NAME,-->
+      <!--</if>-->
+      <!--<if test="valid != null">-->
+        <!--VALID,-->
+      <!--</if>-->
+      <!--<if test="userId != null">-->
+        <!--USER_ID,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
+      <!--<if test="postId != null">-->
+        <!--#{postId,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="floorNum != null">-->
+        <!--#{floorNum,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="rlyTime != null">-->
+        <!--#{rlyTime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="rlyContent != null">-->
+        <!--#{rlyContent,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="username != null">-->
+        <!--#{username,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="reuserName != null">-->
+        <!--#{reuserName,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="valid != null">-->
+        <!--#{valid,jdbcType=CHAR},-->
+      <!--</if>-->
+      <!--<if test="userId != null">-->
+        <!--#{userId,jdbcType=DECIMAL},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+
+  <select id="select" resultMap="BaseResultMap">
+    select *  from tab_rly
+    <where>
+      <![CDATA[
+      and VALID = 1
+    ]]>
+    </where>
+  </select>
+
+  <select id="findrly" parameterType="int" resultMap="BaseResultMap">
+
+         SELECT * FROM tab_rly WHERE postId=#{postId} AND valid =1
+  </select>
+
+  <insert id="add" parameterType="com.seecen.domain.TabRly" >
+    insert into tab_rly (post_id, floor_num, rly_content,username,reuser_name,face_path)
+    values (#{postId,jdbcType=NUMERIC},seq_tab_rly.nextval, #{rlyContent,jdbcType=VARCHAR},
+    #{username,jdbcType=VARCHAR},#{reuserName,jdbcType=VARCHAR},#{facePath,jdbcType=VARCHAR})
+  </insert>
+
+
+</mapper>

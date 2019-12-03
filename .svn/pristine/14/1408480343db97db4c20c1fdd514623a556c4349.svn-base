@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seecen.dao.IRoleDao">
+  <resultMap id="BaseResultMap" type="com.seecen.domain.Role">
+    <id column="ROLE_ID" jdbcType="DECIMAL" property="roleId" />
+    <result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="CREATER" jdbcType="VARCHAR" property="creater" />
+    <result column="UPDATOR" jdbcType="VARCHAR" property="updator" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ROLE_ID, ROLE_NAME, CREATE_DATE, UPDATE_DATE, CREATER, UPDATOR
+  </sql>
+
+</mapper>

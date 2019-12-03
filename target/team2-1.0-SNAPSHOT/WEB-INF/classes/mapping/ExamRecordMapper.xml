@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seecen.dao.ExamRecordDao">
+    <resultMap id="BaseResultMap" type="ExamRecord">
+        <id column="HISTORY_ID" property="examRecordId" jdbcType="NUMERIC"></id>
+        <result column="USER_NAME" property="username" jdbcType="NUMERIC"></result>
+        <result column="USER_ID" property="userId" jdbcType="NUMERIC"></result>
+        <result column="EXAM_ID" property="examId" jdbcType="NUMERIC"></result>
+        <result column="EXAM_NAME" property="examName" jdbcType="NUMERIC"></result>
+        <result column="HISTORY_OBJECTIVESOURCE" property="objectiveSource" jdbcType="NUMERIC"></result>
+        <result column="HISTORY_SUBJECTIVESOURCE" property="subjectiveSource" jdbcType="NUMERIC"></result>
+        <result column="HISTORY_EVALUATION" property="evaluation" jdbcType="VARCHAR"></result>
+        <result column="HISTORY_CREATETIME" property="createTime" jdbcType="TIMESTAMP"></result>
+        <result column="HISTORY_REVIEW" property="review" jdbcType="NUMERIC"></result>
+    </resultMap>
+
+    <resultMap id="UserExamMap" type="UserExam">
+        <result column="SUJECTID" property="subjectId"></result>
+        <result column="ANSWER" property="answer"></result>
+        <result column="REFERENCEANSWERS" property="referenceAnswer"></result>
+        <result column="ANALYTICAL" property="analytical"></result>
+        <result column="SUBJECTSOURCE" property="subjectSource"></result>
+    </resultMap>
+
+    <sql id="BaseSql">
+        HISTORY_ID,USER_ID,EXAM_ID,HISTORY_OBJECTIVESOURCE,HISTORY_SUBJECTIVESOURCE,HISTORY_EVALUATION,HISTORY_EVALUATION,HISTORY_CREATETIME,HISTORY_REVIEW
+    </sql>
+
+    <insert id="saveExamRecord" parameterType="ExamRecord">
+        <selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="examRecordId">
+            SELECT SEQ_TB_EXAMHISTORY.nextval from DUAL
+        </selectKey>
+      INSERT INTO TB_EXAMHISTORY VALUES (SEQ_TB_EXAMHISTORY.currval,#{userId},#{examId},#{objectiveSource},#{subjectiveSource,jdbcType=NUMERIC},#{evaluation,jdbcType=VARCHAR},SYSDATE,#{review})
+    </insert>
+
+    <insert id="saveExamSubject">
+        INSERT INTO TB_HISTORYSUBJECT (SUJECTID,ANSWER,REFERENCEANSWERS,ANALYTICAL,SUBJECTSOURCE,HISTORY_ID)
+            <foreach collection="list" item="exam" separator="union all">
+                (SELECT
+                  #{exam.subjectId},
+                  #{exam.answer,jdbcType=VARCHAR},
+                  #{exam.referenceAnswer,jdbcType=VARCHAR},
+                  #{exam.analytical,jdbcType=VARCHAR},
+                  #{exam.subjectSource},
+                  #{id}
+                FROM dual)
+            </foreach>
+    </insert>
+
+    <select id="findExamRecord" resultMap="BaseResultMap" parameterType="int">
+        SELECT h.*,u.USER_NAME,e.EXAM_NAME FROM TB_EXAMHISTORY h LEFT JOIN TAB_USER u ON h.USER_ID=u.USER_ID LEFT JOIN TB_EXAM e ON h.EXAM_ID=e.EXAM_ID WHERE h.USER_ID=#{id}
+    </select>
+
+    <select id="finaExamInfo" resultMap="UserExamMap" parameterType="int">
+        SELECT SUJECTID,ANSWER FROM TB_HISTORYSUBJECT WHERE HISTORY_ID=#{id,jdbcType=NUMERIC}
+    </select>
+
+    <select id="findExamIdByHistory" resultMap="BaseResultMap"  parameterType="int">
+        SELECT <include refid="BaseSql"/> FROM TB_EXAMHISTORY WHERE HISTORY_ID=#{id}
+    </select>
+</mapper>

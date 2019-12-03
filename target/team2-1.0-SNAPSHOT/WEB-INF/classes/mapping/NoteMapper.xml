@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seecen.dao.INoteDao">
+  <resultMap id="noteMap" type="com.seecen.domain.Note">
+    <id column="NOTE_ID" jdbcType="DECIMAL" property="noteId" />
+    <result column="NOTEBOOK_ID" jdbcType="DECIMAL" property="notebookId" />
+    <result column="USER_ID" jdbcType="DECIMAL" property="userId" />
+    <result column="N_VALID" jdbcType="DECIMAL" property="nValid" />
+    <result column="TITLE" jdbcType="VARCHAR" property="title" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="COLLECTION" jdbcType="DECIMAL" property="collection" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    NOTE_ID, NOTEBOOK_ID, USER_ID, N_VALID, TITLE, CONTENT, CREATE_DATE, UPDATE_DATE,COLLECTION
+  </sql>
+
+  <insert id="save" parameterType="note">
+    insert into TAB_NOTE
+    values (SEQUENCE_TAB_NOTE.nextval,1,#{userId,jdbcType=DECIMAL},
+      #{nValid,jdbcType=DECIMAL}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
+     SYSDATE, SYSDATE,0)
+  </insert>
+
+  <select id="list" parameterType="note" resultMap="noteMap">
+    select * from TAB_NOTE
+    <trim>
+      <where>
+        N_VALID=1
+        <if test="notebookId!=null and notebookId != ''">
+          and NOTEBOOK_ID like '%${notebookId}%'
+        </if>
+        <if test="userId!=null  and userId != ''">
+          and USER_ID like '%${userId}%'
+        </if>
+        <if test="nValid!=null and nValid != ''">
+          and N_VALID like  '%${nValid}%'
+        </if>
+        <if test="title!=null and title != ''">
+          and TITLE like '%${title}%'
+        </if>
+        <if test="content!=null and content != ''">
+          and CONTENT like '%${content}%'
+        </if>
+        <if test="dateStart !=null">
+          and CREATE_DATE >= #{dateStart}
+        </if>
+        <if test="dateEnd !=null">
+          <![CDATA[
+          and CREATE_DATE <= #{dateEnd}
+      ]]>
+        </if>
+        <if test="dateStart !=null">
+          and UPDATE_DATE >= #{dateStart}
+        </if>
+        <if test="dateEnd !=null">
+          <![CDATA[
+          and UPDATE_DATE <= #{dateEnd}
+      ]]>
+        </if>
+        <if test="collection!=null and collection != ''">
+          and COLLECTION  like '%${collection}%'
+        </if>
+      </where>
+    order by UPDATE_DATE desc
+    </trim>
+  </select>
+
+  <select id="selectById" parameterType="int" resultMap="noteMap">
+    select 
+    <include refid="Base_Column_List" />
+    from TAB_NOTE
+    where NOTE_ID = #{noteId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="initById" parameterType="int" resultMap="noteMap">
+  SELECT * FROM TAB_NOTE
+  WHERE NOTE_ID =#{id,jdbcType=NUMERIC}
+  </select>
+
+  <update id="logicDeleteByMore" parameterType="int">
+    update TAB_NOTE set N_VALID=0 where NOTE_ID in
+    <foreach collection="array" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+  </update>
+
+  <select id="listDelete" parameterType="note" resultMap="noteMap">
+    select * from TAB_NOTE
+    <trim>
+      <where>
+        N_VALID=0
+        <if test="notebookId!=null and notebookId != ''">
+          and NOTEBOOK_ID like '%' || =#{notebookId} || '%'
+        </if>
+        <if test="userId!=null  and userId != ''">
+          and USER_ID like '%' || =#{userId} || '%'
+        </if>
+
+        <if test="nValid!=null and nValid != ''">
+          and N_VALID  like '%' || = #{nValid} || '%'
+        </if>
+        <if test="title!=null and title != ''">
+          and TITLE like '%' ||  =#{title} || '%'
+        </if>
+        <if test="content!=null and content != ''">
+          and CONTENT like '%' ||  =#{content} || '%'
+        </if>
+        <if test="dateStart !=null">
+          and CREATE_DATE >= #{dateStart}
+        </if>
+        <if test="dateEnd !=null">
+          <![CDATA[
+          and CREATE_DATE <= #{dateEnd}
+      ]]>
+        </if>
+        <if test="dateStart !=null">
+          and UPDATE_DATE >= #{dateStart}
+        </if>
+        <if test="dateEnd !=null">
+          <![CDATA[
+          and UPDATE_DATE <= #{dateEnd}
+      ]]>
+        </if>
+      </where>
+    </trim>
+  </select>
+
+  <delete id="deleteForever" parameterType="int">
+    DELETE TAB_NOTE WHERE NOTE_ID in
+    <foreach collection="array" item="id" open="(" close=")" separator=",">
+      #{id}
+    </foreach>
+  </delete>
+
+  <update id="revoke" parameterType="int">
+    update TAB_NOTE set N_VALID=1 where NOTE_ID = #{noteId,jdbcType=DECIMAL}
+  </update>
+
+  <update id="update" parameterType="note">
+        update TAB_NOTE set TITLE=#{title,jdbcType=VARCHAR} ,CONTENT=#{content,jdbcType=VARCHAR}
+        ,UPDATE_DATE=SYSDATE
+        where NOTE_ID=#{noteId}
+    </update>
+
+  <select id="listCollections" parameterType="note" resultMap="noteMap">
+    select * from TAB_NOTE
+    <trim>
+      <where>
+        COLLECTION=1 and N_VALID=1
+        <if test="notebookId!=null and notebookId != ''">
+          and NOTEBOOK_ID like '%' || =#{notebookId} || '%'
+        </if>
+        <if test="userId!=null  and userId != ''">
+          and USER_ID like '%' || =#{userId} || '%'
+        </if>
+
+        <if test="nValid!=null and nValid != ''">
+          and N_VALID  like '%' || = #{nValid} || '%'
+        </if>
+        <if test="title!=null and title != ''">
+          and TITLE like '%' ||  =#{title} || '%'
+        </if>
+        <if test="content!=null and content != ''">
+          and CONTENT like '%' ||  =#{content} || '%'
+        </if>
+        <if test="dateStart !=null">
+          and CREATE_DATE >= #{dateStart}
+        </if>
+        <if test="dateEnd !=null">
+          <![CDATA[
+          and CREATE_DATE <= #{dateEnd}
+      ]]>
+        </if>
+        <if test="dateStart !=null">
+          and UPDATE_DATE >= #{dateStart}
+        </if>
+        <if test="dateEnd !=null">
+          <![CDATA[
+          and UPDATE_DATE <= #{dateEnd}
+      ]]>
+        </if>
+      </where>
+    </trim>
+  </select>
+
+  <update id="collect" parameterType="note">
+        update TAB_NOTE set COLLECTION=1
+        where NOTE_ID=#{noteId}
+    </update>
+
+  <update id="cancelCollect" parameterType="note">
+        update TAB_NOTE set COLLECTION=0
+        where NOTE_ID=#{noteId}
+    </update>
+
+  <select id="share" parameterType="note">
+    select * from TAB_NOTE
+    <trim>
+      <where>
+        N_VALID=0
+        <if test="notebookId!=null and notebookId != ''">
+          and NOTEBOOK_ID like '%' || =#{notebookId} || '%'
+        </if>
+        <if test="userId!=null  and userId != ''">
+          and USER_ID like '%' || =#{userId} || '%'
+        </if>
+
+        <if test="nValid!=null and nValid != ''">
+          and N_VALID  like '%' || = #{nValid} || '%'
+        </if>
+        <if test="title!=null and title != ''">
+          and TITLE like '%' ||  =#{title} || '%'
+        </if>
+        <if test="content!=null and content != ''">
+          and CONTENT like '%' ||  =#{content} || '%'
+        </if>
+        <if test="dateStart !=null">
+          and CREATE_DATE >= #{dateStart}
+        </if>
+        <if test="dateEnd !=null">
+          <![CDATA[
+          and CREATE_DATE <= #{dateEnd}
+      ]]>
+        </if>
+        <if test="dateStart !=null">
+          and UPDATE_DATE >= #{dateStart}
+        </if>
+        <if test="dateEnd !=null">
+          <![CDATA[
+          and UPDATE_DATE <= #{dateEnd}
+      ]]>
+        </if>
+      </where>
+    </trim>
+    </select>
+
+</mapper>

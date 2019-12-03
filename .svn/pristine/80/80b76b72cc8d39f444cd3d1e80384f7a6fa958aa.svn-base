@@ -1,0 +1,18 @@
+package com.seecen.service;
+
+import com.seecen.domain.SubjectBank;
+
+import java.util.List;
+
+/**
+ * @author 沈煜辉
+ * @date 2019/10/24 14:40
+ * @describe
+ */
+public interface SubjectBankService {
+    /**
+     * service层查询题库中的所有题
+     * @return list集合题库
+     */
+    List<SubjectBank> findAll();
+}

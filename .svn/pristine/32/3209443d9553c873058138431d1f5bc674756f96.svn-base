@@ -1,0 +1,48 @@
+package com.seecen.domain;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+/**
+ * @author 沈煜辉
+ * @date 2019/10/24 19:01
+ * @describe 综合类，一般类都会又的属性
+ */
+public class Father {
+    private Date startTime;
+    private Date endTime;
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public String getStartTimeStr(){
+        String startTimeStr = null;
+        if(startTime!=null){
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            startTimeStr = simpleDateFormat.format(startTime);
+        }
+        return startTimeStr;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public String getEndTimeStr(){
+        String endTimeStr = null;
+        if(endTime!=null){
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            endTimeStr = simpleDateFormat.format(endTime);
+        }
+        return endTimeStr;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+}

@@ -1,0 +1,81 @@
+package com.seecen.service.impl;
+
+import com.seecen.dao.UserDao;
+import com.seecen.domain.Clas;
+import com.seecen.domain.User;
+import com.seecen.domain.UserBo;
+import com.seecen.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * @PackageName: com.seecen.service.impl
+ * @ClassName: UserServiceimpl
+ * @Description: TODO
+ * @Author: hao
+ * @Date: 2019/10/25 - 9:55
+ * @Version: 1.0
+ **/
+@Service
+public class UserServiceimpl  implements UserService {
+
+   @Autowired
+    private  UserDao  userDao;
+
+    @Override
+    public int save(User user) {
+        User exist =  userDao.findByName(user.getUserName());
+        if(exist == null){
+            userDao.save(user);
+            return 1;
+        }
+            return  0 ;
+    }
+
+    @Override
+    public User login(User user) {
+        User userdata = userDao.findByName(user.getUserName());
+        return userdata;
+
+    }
+
+    public List<User> findUser(Integer userId) {
+        return userDao.findUser(userId);
+    }
+
+    @Override
+    public void delUser(int userId) {
+        userDao.delUser(userId);
+    }
+
+    @Override
+    public void updateUserdata(User user) {
+        System.out.println("333333333333");
+        userDao.updateUserdata(user);
+    }
+
+    @Override
+    public List<User> findUserJ(UserBo userBo) {
+        return userDao.findUserJ(userBo);
+    }
+
+    //    用户列表分页
+    public List<User> list(User user, int pageNum, int pageSize) {
+        return userDao.list(user);
+    }
+
+
+    //查找用户类型
+    public List<String> findIsAdmin() {
+        return userDao.findIsAdmin();
+    }
+
+    //查找班级id
+    public List<Clas> findClassId() {
+        return userDao.findClassId();
+    }
+
+
+}

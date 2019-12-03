@@ -1,0 +1,26 @@
+package com.seecen.service.impl;
+
+import com.seecen.dao.SubjectBankDao;
+import com.seecen.domain.SubjectBank;
+import com.seecen.service.SubjectBankService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * @author 沈煜辉
+ * @date 2019/10/24 14:40
+ * @describe 查询题库的业务层接口
+ */
+@Service
+public class SubjectBankServiceImpl implements SubjectBankService {
+
+    @Autowired
+    private SubjectBankDao subjectBankDao;
+
+    @Override
+    public List<SubjectBank> findAll() {
+        return subjectBankDao.findAll();
+    }
+}

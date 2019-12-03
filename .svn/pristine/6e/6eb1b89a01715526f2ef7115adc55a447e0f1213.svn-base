@@ -1,0 +1,36 @@
+package com.seecen.service.impl;
+
+
+import com.seecen.dao.TabRlyDao;
+import com.seecen.domain.TabRly;
+import com.seecen.service.TabRlyService;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+public class TabRlyServiceImpl implements TabRlyService {
+    @Autowired
+    private TabRlyDao tabRlyDao;
+
+    @Override
+    public List<TabRly> select() {
+        return tabRlyDao.select();
+    }
+
+    @Override
+    public TabRly findrly( Integer postId) {
+        TabRly tabRly = new TabRly();
+        tabRly.setPostId(postId);
+        return tabRly;
+    }
+
+    @Override
+    @Transactional
+    public void add(TabRly tabRly){
+        tabRlyDao.add(tabRly);
+    }
+}

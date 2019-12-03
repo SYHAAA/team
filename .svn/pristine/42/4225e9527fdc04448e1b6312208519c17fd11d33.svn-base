@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seecen.dao.TieziMessageDao">
+  <resultMap id="BaseResultMap" type="TieziMessage">
+    <id column="ID" jdbcType="NUMERIC" property="id" />
+    <result column="CUSTOMERID" jdbcType="NUMERIC" property="customerid" />
+    <result column="TITLE" jdbcType="VARCHAR" property="title" />
+    <result column="RLY_CONTENT" jdbcType="VARCHAR" property="rlyContent" />
+    <result column="ZAN" jdbcType="NUMERIC" property="zan" />
+    <result column="CREATEDATE" jdbcType="TIMESTAMP" property="createdate" />
+    <result column="RLYNUM" jdbcType="NUMERIC" property="rlynum" />
+    <result column="VALID" jdbcType="NUMERIC" property="valid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+  ID, CUSTOMERID, TITLE, RLY_CONTENT, ZAN, CREATEDATE, RLYNUM, VALID
+  </sql>
+  <!--<sql id="Base_Column_List">-->
+    <!--ID, CUSTOMERID, TITLE, PIC, RLY_CONTENT, ZAN, CREATEDATE, RLYNUM, VALID-->
+  <!--</sql>-->
+  <!--<select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">-->
+    <!--select -->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from T_WDXX-->
+    <!--where ID = #{id,jdbcType=DECIMAL}-->
+  <!--</select>-->
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">-->
+    <!--delete from T_WDXX-->
+    <!--where ID = #{id,jdbcType=DECIMAL}-->
+  <!--</delete>-->
+  <!--<insert id="insert" parameterType="com.seecen.domain.TieziMessage">-->
+    <!--insert into T_WDXX (ID, CUSTOMERID, TITLE, -->
+      <!--PIC, RLY_CONTENT, ZAN, -->
+      <!--CREATEDATE, RLYNUM, VALID-->
+      <!--)-->
+    <!--values (#{id,jdbcType=DECIMAL}, #{customerid,jdbcType=DECIMAL}, #{title,jdbcType=VARCHAR}, -->
+      <!--#{pic,jdbcType=VARCHAR}, #{rlyContent,jdbcType=VARCHAR}, #{zan,jdbcType=DECIMAL}, -->
+      <!--#{createdate,jdbcType=TIMESTAMP}, #{rlynum,jdbcType=DECIMAL}, #{valid,jdbcType=DECIMAL}-->
+      <!--)-->
+  <!--</insert>-->
+  <!--<insert id="insertSelective" parameterType="com.seecen.domain.TieziMessage">-->
+    <!--insert into T_WDXX-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
+      <!--<if test="id != null">-->
+        <!--ID,-->
+      <!--</if>-->
+      <!--<if test="customerid != null">-->
+        <!--CUSTOMERID,-->
+      <!--</if>-->
+      <!--<if test="title != null">-->
+        <!--TITLE,-->
+      <!--</if>-->
+      <!--<if test="pic != null">-->
+        <!--PIC,-->
+      <!--</if>-->
+      <!--<if test="rlyContent != null">-->
+        <!--RLY_CONTENT,-->
+      <!--</if>-->
+      <!--<if test="zan != null">-->
+        <!--ZAN,-->
+      <!--</if>-->
+      <!--<if test="createdate != null">-->
+        <!--CREATEDATE,-->
+      <!--</if>-->
+      <!--<if test="rlynum != null">-->
+        <!--RLYNUM,-->
+      <!--</if>-->
+      <!--<if test="valid != null">-->
+        <!--VALID,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
+      <!--<if test="id != null">-->
+        <!--#{id,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="customerid != null">-->
+        <!--#{customerid,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="title != null">-->
+        <!--#{title,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="pic != null">-->
+        <!--#{pic,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="rlyContent != null">-->
+        <!--#{rlyContent,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="zan != null">-->
+        <!--#{zan,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="createdate != null">-->
+        <!--#{createdate,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="rlynum != null">-->
+        <!--#{rlynum,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="valid != null">-->
+        <!--#{valid,jdbcType=DECIMAL},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.seecen.domain.TieziMessage">-->
+    <!--update T_WDXX-->
+    <!--<set>-->
+      <!--<if test="customerid != null">-->
+        <!--CUSTOMERID = #{customerid,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="title != null">-->
+        <!--TITLE = #{title,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="pic != null">-->
+        <!--PIC = #{pic,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="rlyContent != null">-->
+        <!--RLY_CONTENT = #{rlyContent,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="zan != null">-->
+        <!--ZAN = #{zan,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="createdate != null">-->
+        <!--CREATEDATE = #{createdate,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="rlynum != null">-->
+        <!--RLYNUM = #{rlynum,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="valid != null">-->
+        <!--VALID = #{valid,jdbcType=DECIMAL},-->
+      <!--</if>-->
+    <!--</set>-->
+    <!--where ID = #{id,jdbcType=DECIMAL}-->
+  <!--</update>-->
+  <!--<update id="updateByPrimaryKey" parameterType="com.seecen.domain.TieziMessage">-->
+    <!--update T_WDXX-->
+    <!--set CUSTOMERID = #{customerid,jdbcType=DECIMAL},-->
+      <!--TITLE = #{title,jdbcType=VARCHAR},-->
+      <!--PIC = #{pic,jdbcType=VARCHAR},-->
+      <!--RLY_CONTENT = #{rlyContent,jdbcType=VARCHAR},-->
+      <!--ZAN = #{zan,jdbcType=DECIMAL},-->
+      <!--CREATEDATE = #{createdate,jdbcType=TIMESTAMP},-->
+      <!--RLYNUM = #{rlynum,jdbcType=DECIMAL},-->
+      <!--VALID = #{valid,jdbcType=DECIMAL}-->
+    <!--where ID = #{id,jdbcType=DECIMAL}-->
+  <!--</update>-->
+
+  <select id="select"  resultMap="BaseResultMap">
+    <!--SELECT M.ID,-->
+    <!--M.CUSTOMERID,-->
+    <!--M.TITLE,-->
+    <!--M.PIC,-->
+    <!--M.RLY_CONTENT,-->
+    <!--M.ZAN,-->
+    <!--M.CREATEDATE,-->
+    <!--M.RLYNUM,-->
+    <!--M.VALID-->
+    <!--FROM T_WDXX M-->
+    <!--LEFT JOIN T_WDXX P-->
+    <!--ON M.ID = P.ID-->
+    <!--<where>-->
+      <!--m.valid = 1-->
+      <!--<if test="perName != null and perName != ''">-->
+        <!--and m.per_name like '%${perName}%'-->
+      <!--</if>-->
+      <!--<if test="perInfo != null and perInfo != ''">-->
+        <!--and m.per_info like '%${perInfo}%'-->
+      <!--</if>-->
+      <!--<if test="parentInfo.perId != null">-->
+        <!--and m.per_parent_id = #{parentInfo.perId,jdbcType=NUMERIC}-->
+      <!--</if>-->
+    <!--</where>-->
+     select <include refid="Base_Column_List"/> from t_wdxx
+    <where>
+      <![CDATA[
+                    and VALID=1
+                ]]>
+    </where>
+  </select>
+
+  <select id="initById" parameterType="int" >
+    select * from t_wdxx where id = #{id}
+  </select>
+
+  <!--<select id="list" resultMap="BaseResultMap">-->
+    <!--SELECT-->
+       <!--u.user_Id,-->
+       <!--u.face_path,-->
+       <!--u.user_name,-->
+       <!--fl.refloortime,-->
+       <!--fl.refloorcontent-->
+       <!--FROM tab_user u,tab_refloors fl-->
+       <!--WHERE u.user_id=fl.user_id AND u.valid = fl.valid-->
+  <!--</select>-->
+
+  <insert id="insert" parameterType="com.seecen.domain.TieziMessage" >
+    insert into t_wdxx (id, title, rly_content)
+    values (seq_t_wdxx.nextval, #{title,jdbcType=VARCHAR}, #{rlyContent,jdbcType=VARCHAR})
+  </insert>
+</mapper>

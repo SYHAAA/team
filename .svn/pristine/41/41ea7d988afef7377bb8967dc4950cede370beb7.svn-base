@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seecen.dao.UserDao">
+  <resultMap id="userMap" type="com.seecen.domain.User">
+    <id column="USER_ID" jdbcType="DECIMAL" property="userId" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="CLASS_ID" jdbcType="DECIMAL" property="classId" />
+    <result column="BIRTHDAY" jdbcType="TIMESTAMP" property="birthday" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="GENDER" jdbcType="CHAR" property="gender" />
+    <result column="TELEPHONE" jdbcType="VARCHAR" property="telephone" />
+    <result column="ISADMIN" jdbcType="CHAR" property="isadmin" />
+    <result column="FACE_PATH" jdbcType="VARCHAR" property="facePath" />
+    <result column="VALID" jdbcType="CHAR" property="valid" />
+  </resultMap>
+
+
+    <resultMap id="clasMap" type="com.seecen.domain.Clas">
+        <id column="CLASS_ID" jdbcType="DECIMAL"  property="classId"></id>
+        <result column="CLASS_NAME" jdbcType="VARCHAR"  property="className"></result>
+    </resultMap>
+
+    <sql id="ClasSql">
+        CLASS_ID,CLASS_NAME
+    </sql>
+
+
+  <sql id="Base_Column_List">
+    USER_ID, USER_NAME, CLASS_ID, BIRTHDAY, PASSWORD, GENDER, TELEPHONE, ISADMIN, FACE_PATH, 
+    VALID
+  </sql>
+
+
+   <!--查询班级id-->
+    <select id="findClassId" resultMap="clasMap">
+        SELECT <include refid="ClasSql"/> FROM TAB_CLASS
+    </select>
+
+  <!--<select id="getUserRole" parameterType="string" resultType="string">-->
+    <!--select r.role_name from t_user u left join t_user_role ur on-->
+    <!--u.user_id = ur.user_id left join t_role r on r.role_id = ur.role_id-->
+    <!--where isadmin =1 and u.user_name = #{id,jdbcType=VARCHAR}-->
+  <!--</select>-->
+
+    <!--权限功能-->
+    <select id="getUserRole" parameterType="string" resultType="string">
+    select r.role_name from tab_user u left join tab_user_role ur on
+    u.user_id = ur.user_id left join t_role r on r.role_id = ur.role_id
+    where isadmin =1 and u.user_name = #{id,jdbcType=VARCHAR}
+  </select>
+
+    <!--权限功能-->
+    <select id="getUserPermission" parameterType="string" resultType="string">
+    select p.per_name from tab_user u left join t_user_role ur on
+    u.user_id = ur.user_id left join tab_permission p on ur.role_id = p.role_id
+    where u.isadmin =1 and u.user_name= #{id,jdbcType=VARCHAR}
+  </select>
+
+    <!--权限功能-->
+    <select id="getByName" parameterType="string" resultMap="userMap">
+    select * from tab_user where user_name=#{id}
+</select>
+
+
+  <!--查询是否有该用户-->
+  <select id="findByName" parameterType="string" resultMap="userMap">
+    select  <include refid="Base_Column_List"/> from TAB_USER where  USER_NAME=#{userName}
+  </select>
+
+  <!--保存用户-->
+  <insert id="save" parameterType="com.seecen.domain.User">
+    insert into TAB_USER(USER_ID, USER_NAME,CLASS_ID,PASSWORD, ISADMIN,BIRTHDAY,VALID, TELEPHONE ) values
+    (SEQ_TAB_USER.nextval,#{userName,
+    jdbcType=VARCHAR} ,#{classId,jdbcType=DECIMAL},
+     #{password,jdbcType=VARCHAR},
+     0,
+     sysdate ,
+     1,
+    #{telephone,jdbcType=VARCHAR}
+)
+  </insert>
+
+
+   <!--注册查找功能-->
+    <select id="findAll" parameterType="string" resultType="int">
+        select count(user_name) from tab_user where user_name=#{id}
+    </select>
+
+  <select id="findUser" parameterType="int" resultMap="userMap">
+        select * from TAB_USER where USER_ID=#{id,jdbcType=NUMERIC}
+</select>
+
+  <update id="updateUserdata" parameterType="com.seecen.domain.User">
+        update TAB_USER set user_name=#{userName,jdbcType=VARCHAR},
+        PASSWORD=#{password,jdbcType=VARCHAR},
+        gender=#{gender,jdbcType=VARCHAR},
+        isadmin=0,FACE_PATH=#{facePath,jdbcType=VARCHAR},
+        VALID='1' where user_id=#{userId,jdbcType=NUMERIC}
+</update>
+
+
+    <select id="list" resultMap="userMap" parameterType="com.seecen.domain.User">
+        SELECT <include refid="Base_Column_List"/> FROM TAB_USER
+        <where>
+            <if test="startTime != null " >
+                AND BIRTHDAY >= #{startTime}
+            </if>
+            <if test="endTime != null  ">
+                AND #{endTime} >= BIRTHDAY
+            </if>
+            <if test="userName != null and userName !='' ">
+                AND USER_NAME LIKE '%' || #{userName ,jdbcType=VARCHAR } || '%'
+            </if>
+            <if test="classId != null and classId !=''">
+                AND CLASS_ID = #{classId}
+            </if>
+            <if test="gender != null and gender !='' ">
+                AND GENDER = #{gender}
+            </if>
+            <if test="isadmin != null and isadmin !=''">
+                AND ISADMIN = #{isadmin}
+            </if>
+            <if test="telephone != null and telephone !='' ">
+                AND TELEPHONE like  '%' || #{telephone ,jdbcType=VARCHAR } || '%'
+            </if>
+            <![CDATA[
+                    and VALID=1 ORDER BY BIRTHDAY DESC
+                ]]>
+        </where>
+    </select>
+
+
+    <!--查找用户类型-->
+    <select id="findIsAdmin" resultType="String">
+        SELECT DISTINCT ISADMIN FROM TAB_USER
+    </select>
+<!--物理删除用户-->
+    <update id="delUser" parameterType="int">
+        update tab_user set valid=0 where user_id=#{id}
+    </update>
+
+
+    <!--//根据id查找用户信息-->
+    <select id="findUserById" parameterType="int" resultMap="userMap">
+        SELECT <include refid="Base_Column_List"/> FROM TAB_USER WHERE USER_ID=#{id ,jdbcType=DECIMAL }
+    </select>
+
+
+<!--修改用户信息-->
+    <update id="updateUser" parameterType="com.seecen.domain.User">
+        update TAB_USER set
+        USER_NAME = #{userName},
+        CLASS_ID = #{classId},
+        <if test="birthday != null  ">
+            AND #{birthday}= BIRTHDAY
+        </if>
+        GENDER=#{gender},
+        ISADMIN=#{isadmin},
+        TELEPHONE = #{telephone}
+        where user_id=#{userId}
+    </update>
+
+
+
+    <!--添加用户-->
+    <insert id="addUser" parameterType="com.seecen.domain.User">
+    insert into TAB_USER(USER_ID, USER_NAME,CLASS_ID,GENDER, ISADMIN,BIRTHDAY,VALID, TELEPHONE ) values
+    (SEQ_TAB_USER.nextval,#{userName,
+    jdbcType=VARCHAR} ,#{classId,jdbcType=DECIMAL},
+     #{gender,jdbcType=VARCHAR},
+     0,
+     sysdate ,
+     1,
+    #{telephone,jdbcType=VARCHAR}
+)
+  </insert>
+
+
+    <!--批量删除-->
+    <update id="deleteAll" parameterType="int">
+        update TAB_USER  set VALID=0  where  USER_ID in
+        <foreach collection="array" item="id"
+                 open="(" close=")" separator=",">
+            #{id,jdbcType=DECIMAL}
+        </foreach>
+    </update>
+
+
+</mapper>

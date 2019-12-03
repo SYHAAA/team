@@ -1,0 +1,36 @@
+package com.seecen.dao;
+
+import com.seecen.domain.SubjectBank;
+import com.seecen.domain.SubjectType;
+import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/**
+ * @author 沈煜辉
+ * @date 2019/10/24 14:25
+ * @dscribe 例题查询知识点
+ */
+@Repository
+public interface SubjectBankDao {
+
+    /**
+     * 分页查询所有题库中的所有题目
+     * @param subjectBank 条件
+     * @return subjectBank集合
+     */
+    List<SubjectBank> findAllWithPage(SubjectBank subjectBank);
+
+    /**
+     * 查询全部题目类型
+     * @return 题目类型集合
+     */
+    List<SubjectType> findAllSubjectType();
+
+    /**
+     * dao层查询所有的知识点
+     * @return
+     */
+    List<String> findAllSubjectPoints();
+}

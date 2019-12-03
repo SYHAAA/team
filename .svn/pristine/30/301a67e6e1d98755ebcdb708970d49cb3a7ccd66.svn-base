@@ -1,0 +1,11 @@
+package com.seecen.service.impl;
+
+import com.seecen.service.IUserService;
+
+/**
+ * @Author 鞠志超
+ * @Date 2019/10/25 9:27
+ * @Description
+ */
+public class UserService implements IUserService {
+}

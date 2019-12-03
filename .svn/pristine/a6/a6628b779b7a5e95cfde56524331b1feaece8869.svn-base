@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seecen.dao.ExamDao">
+    <resultMap id="BaseResultMap" type="Exam">
+        <id property="examId" column="EXAM_ID" jdbcType="NUMERIC"></id>
+        <result property="examName" column="EXAM_NAME" jdbcType="VARCHAR"></result>
+        <result property="startTime" column="START_TIME" jdbcType="TIMESTAMP"></result>
+        <result property="endTime" column="END_TIME" jdbcType="TIMESTAMP"></result>
+        <result property="examGrade" column="EXAM_GRADE" jdbcType="NUMERIC"></result>
+        <result property="examTotalTime" column="EXAM_TOTALTIME" jdbcType="NUMERIC"></result>
+        <!--多对多关系之间的配置-->
+        <collection property="subjects" ofType="SubjectBank">
+            <id column="SUBJECT_ID" property="subjectId"></id>
+            <result column="SUBJECT_POINTS" property="subjectPoints"></result>
+            <result column="SUBJECT_TYPE" property="subjectType.typeId"></result>
+            <result column="SUBJECT_CONTENT" property="subjectContent"></result>
+            <result column="SUBJECT_OPTION" property="subjectOption"></result>
+            <result column="SUBJECT_ANSWER" property="subjectAnswer"></result>
+            <result column="SUBJECT_ANALYTICAL" property="subjectAnalytical"></result>
+            <result column="CREATE_TIME" property="createTime"></result>
+            <result column="SUBJECT_SOURCE" property="subjectSource"></result>
+            <result column="VALID" property="valid"></result>
+        </collection>
+
+    </resultMap>
+
+    <sql id="BaseSql">
+        EXAM_ID,EXAM_NAME,START_TIME,END_TIME,EXAM_GRADE,EXAM_TOTALTIME
+    </sql>
+
+    <select id="findAllWithPage" parameterType="Exam" resultMap="BaseResultMap">
+        SELECT <include refid="BaseSql"/> FROM TB_EXAM
+        <where>
+            <if test="examName != null">
+                AND EXAM_NAME LIKE '%${examName}%'
+            </if>
+            <![CDATA[
+                    and VALID=1
+                ]]>
+        </where>
+    </select>
+
+    <insert id="saveExam" parameterType="Exam">
+        <selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="examId">
+            SELECT SEQ_EXAM.nextval from DUAL
+        </selectKey>
+      INSERT INTO TB_EXAM VALUES (SEQ_EXAM.currval,#{examName},#{startTime},#{endTime},#{examGrade},#{examTotalTime},1)
+    </insert>
+
+    <insert id="saveExamAndSubject">
+        INSERT INTO TB_EXAM_SUBJECTBANK VALUES (#{examId},#{radioId},#{radioSource})
+    </insert>
+
+    <select id="findExam" parameterType="int" resultMap="BaseResultMap">
+        SELECT te.EXAM_ID,EXAM_NAME,START_TIME,END_TIME,EXAM_GRADE,EXAM_TOTALTIME,tes.SUBJECT_ID,SUBJECT_POINTS,SUBJECT_TYPE,SUBJECT_CONTENT,SUBJECT_OPTION,SUBJECT_ANSWER,SUBJECT_ANALYTICAL,SUBJECT_SOURCE FROM TB_EXAM te LEFT JOIN TB_EXAM_SUBJECTBANK tes ON te.EXAM_ID=tes.EXAM_ID LEFT JOIN TB_SUBJECTBANK ts ON
+        tes.SUBJECT_ID=ts.SUBJECT_ID WHERE te.EXAM_ID=#{id} AND te.VALID=1 ORDER BY ts.SUBJECT_TYPE ASC
+    </select>
+
+    <update id="deleteExam" parameterType="int">
+      UPDATE TB_EXAM SET VALID=0 WHERE EXAM_ID=#{id}
+    </update>
+</mapper>

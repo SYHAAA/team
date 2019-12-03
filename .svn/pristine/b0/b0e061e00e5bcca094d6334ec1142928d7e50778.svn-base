@@ -1,0 +1,22 @@
+package com.seecen.dao;
+
+import com.seecen.domain.SubjectBank;
+import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/**
+ * @author 沈煜辉
+ * @date 2019/10/24 14:25
+ * @dscribe 例题查询知识点
+ */
+@Repository
+public interface SubjectBankDao {
+
+    /**
+     * 查询所有题库中的所有题目
+     * @return
+     */
+    List<SubjectBank> findAll();
+}

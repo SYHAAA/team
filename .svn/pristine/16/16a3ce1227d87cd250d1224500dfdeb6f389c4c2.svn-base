@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seecen.dao.UserDao">
+  <resultMap id="userMap" type="com.seecen.domain.User">
+    <id column="USER_ID" jdbcType="DECIMAL" property="userId" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="CLASS_ID" jdbcType="DECIMAL" property="classId" />
+    <result column="BIRTHDAY" jdbcType="TIMESTAMP" property="birthday" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="GENDER" jdbcType="CHAR" property="gender" />
+    <result column="TELEPHONE" jdbcType="VARCHAR" property="telephone" />
+    <result column="ISADMIN" jdbcType="CHAR" property="isadmin" />
+    <result column="FACE_PATH" jdbcType="VARCHAR" property="facePath" />
+    <result column="VALID" jdbcType="CHAR" property="valid" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    USER_ID, USER_NAME, CLASS_ID, BIRTHDAY, PASSWORD, GENDER, TELEPHONE, ISADMIN, FACE_PATH, 
+    VALID
+  </sql>
+  <!--<select id="getUserRole" parameterType="string" resultType="string">-->
+    <!--select r.role_name from t_user u left join t_user_role ur on-->
+    <!--u.user_id = ur.user_id left join t_role r on r.role_id = ur.role_id-->
+    <!--where isadmin =1 and u.user_name = #{id,jdbcType=VARCHAR}-->
+  <!--</select>-->
+
+
+  <!--查询是否有该用户-->
+  <select id="findByName" parameterType="string" resultMap="userMap">
+    select  <include refid="Base_Column_List"/> from TAB_USER where  USER_NAME=#{userName}
+  </select>
+
+  <!--保存用户-->
+  <insert id="save" parameterType="com.seecen.domain.User">
+    insert into TAB_USER(USER_ID, USER_NAME,CLASS_ID,PASSWORD, ISADMIN,BIRTHDAY,VALID, TELEPHONE ) values
+    (SEQ_TAB_USER.nextval,#{userName,
+    jdbcType=VARCHAR} ,#{classId,jdbcType=DECIMAL},
+     #{password,jdbcType=VARCHAR},
+     0,
+     sysdate ,
+     1,
+    #{telephone,jdbcType=VARCHAR}
+)
+  </insert>
+
+  <select id="findUser" parameterType="int" resultMap="userMap">
+        select * from TAB_USER where USER_ID=#{id,jdbcType=NUMERIC}
+</select>
+
+  <update id="updateUserdata" parameterType="com.seecen.domain.User">
+        update TAB_USER set user_name=#{userName,jdbcType=VARCHAR},
+        class_id=#{classId,jdbcType=NUMERIC},BIRTHDAY=NULL,PASSWORD=#{password,jdbcType=VARCHAR},
+        gender=#{gender,jdbcType=VARCHAR},
+        isadmin=0,FACE_PATH=#{facePath,jdbcType=VARCHAR},
+        VALID='1' where user_id=#{userId,jdbcType=NUMERIC}
+</update>
+</mapper>

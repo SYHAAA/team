@@ -1,0 +1,195 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>我的帖子</title>
+    <script src="/pages/js/jquery.min.js"></script>
+    <script src="/pages/lib/layui/layui.js"></script>
+
+    <link id="layuicss-layer" rel="stylesheet" href="/pages/lib/layer.css" media="all">
+    <link rel="stylesheet" href="/pages/lib/layui/css/font_24081_qs69ykjbea.css">
+    <link rel="stylesheet" href="/pages/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="/pages/lib/layui/css/glo.css" charset="utf-8">
+
+    <script src="/pages/luntan/element.js"></script>
+    <script src="/pages/luntan/face.js"></script>
+    <script src="/pages/luntan/form.js"></script>
+    <script src="/pages/luntan/hm.js"></script>
+    <script src="/pages/luntan/index.js"></script>
+    <script src="/pages/luntan/laytpl.js"></script>
+    <script src="/pages/luntan/upload.js"></script>
+    <script src="/pages/luntan/util.js"></script>
+</head>
+
+<script>
+    layui.use(['layer', 'form', 'laypage', 'table','jquery'], function(){
+        var table = layui.table;
+        var $ = layui.$;
+        var layer =layui.layer;
+        var table =layui.table;
+        var router = layui.router();
+        table.render({
+            elem: '#test'
+            , url: '/replyMessage/find.action'
+            ,cols: [[
+                {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true}
+                ,{field:'customerid', title:'用户名', width:120}
+                ,{field:'title', title:'标题', width:80, sort: true}
+                //,{field:'pic', title:'图片', width:100}
+                ,{field:'rlyContent', title:'内容'}
+                ,{field:'zan', title:'赞', width:80, sort: true}
+                ,{field:'createdate', title:'发布日期', width:120}
+                ,{field:'rlynum', title:'回复量', width:100, sort: true}
+               ,{field:'valid', title:'有效与否', width:120}
+            ]]
+            , page: true
+            , toolbar: 'default'
+            , totalRow: true
+            , parseData: function (res) {
+                return {
+                    "code": 0, //解析接口状态
+                    "count": res.length, //解析数据长度
+                    "data": res //解析数据列表
+                    //"count": res.total, //解析数据长度
+                    // "data": res.list //解析数据列表
+                }
+            }
+        });
+        });
+        </script>
+
+<body style="">
+<div class="layui-container fly-marginTop fly-user-main">
+
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon"></i>
+    </div>
+    <div class="site-mobile-shade"></div>
+    <div class="fly-panel fly-panel-user" pad20="">
+        <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_uc">
+            <ul class="layui-tab-title" id="LAY_mine">
+                <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖</li>
+                <li data-type="collection" data-url="/collection/find/" lay-id="collection" class="">我收藏的帖</li>
+            </ul>
+            <div class="layui-tab-content" id="LAY_ucm" style="padding: 5px 0;">
+                <div class="layui-tab-item layui-show">
+                    <table class="layui-hide" id="LAY_mySendCard"></table>
+                    <div class="layui-form layui-border-box layui-table-view" lay-filter="LAY-table-1" lay-id="LAY_mySendCard" style=" ">
+                        <div class="layui-table-box">
+                            <div class="layui-table-header">
+                                <table id="test" cellspacing="0" cellpadding="0" border="0" class="layui-table" lay-skin="line">
+                                    <!--<thead>-->
+                                    <!--<tr>-->
+                                        <!--<th data-field="title" data-key="1-0-0" data-minwidth="300" class="">-->
+                                            <!--<div class="layui-table-cell laytable-cell-1-0-0">-->
+                                                <!--<span>帖子标题</span>-->
+                                            <!--</div>-->
+                                        <!--</th>-->
+                                        <!--<th data-field="status" data-key="1-0-1" class="">-->
+                                            <!--<div class="layui-table-cell laytable-cell-1-0-1" align="center">-->
+                                                <!--<span>状态</span>-->
+                                            <!--</div>-->
+                                        <!--</th>-->
+                                        <!--<th data-field="status" data-key="1-0-2" class="">-->
+                                            <!--<div class="layui-table-cell laytable-cell-1-0-2" align="center">-->
+                                                <!--<span>结贴</span>-->
+                                            <!--</div>-->
+                                        <!--</th>-->
+                                        <!--<th data-field="time" data-key="1-0-3" class="">-->
+                                            <!--<div class="layui-table-cell laytable-cell-1-0-3" align="center">-->
+                                                <!--<span>发表时间</span>-->
+                                            <!--</div>-->
+                                        <!--</th>-->
+                                        <!--<th data-field="4" data-key="1-0-4" class=" layui-table-col-special">-->
+                                            <!--<div class="layui-table-cell laytable-cell-1-0-4">-->
+                                                <!--<span>数据</span>-->
+                                            <!--</div>-->
+                                        <!--</th>-->
+                                        <!--<th data-field="5" data-key="1-0-5" class=" layui-table-col-special">-->
+                                            <!--<div class="layui-table-cell laytable-cell-1-0-5">-->
+                                                <!--<span>操作</span>-->
+                                            <!--</div>-->
+                                        <!--</th>-->
+                                    <!--</tr>-->
+                                    <!--</thead>-->
+                                </table>
+                            </div>
+                            <!--<div class="layui-table-body layui-table-main">-->
+                                <!--<table cellspacing="0" cellpadding="0" border="0" class="layui-table" lay-skin="line">-->
+                                    <!--<tbody>-->
+
+                                    <!--</tbody>-->
+                                <!--</table>-->
+                                <!--<div class="layui-none">无数据</div>-->
+                            <!--</div>-->
+                        </div>
+
+                        <!--<style>-->
+                            <!--.laytable-cell-1-0-0{-->
+
+                            <!--}-->
+                            <!--.laytable-cell-1-0-1{-->
+                                <!--width: 100px;-->
+                            <!--}-->
+                            <!--.laytable-cell-1-0-2{-->
+                                <!--width: 100px;-->
+                            <!--}-->
+                            <!--.laytable-cell-1-0-3{-->
+                                <!--width: 120px;-->
+                            <!--}-->
+                            <!--.laytable-cell-1-0-4{-->
+                                <!--width: 150px;-->
+                            <!--}-->
+                            <!--.laytable-cell-1-0-5{-->
+                                <!--width: 100px;-->
+                            <!--}-->
+                        <!--</style>-->
+                    </div>
+                </div>
+                <div class="layui-tab-item" style="">
+                    <div class="layui-form layui-border-box layui-table-view" lay-filter="LAY-table-4" lay-id="LAY_myCollectioncard" style=" ">
+                        <div class="layui-table-box">
+                            <div class="layui-table-header">
+                                <table cellspacing="0" cellpadding="0" border="0" class="layui-table" lay-skin="line">
+                                    <thead>
+                                    <tr>
+                                        <th data-field="title" data-key="4-0-0" data-minwidth="300" class="">
+                                            <div class="layui-table-cell laytable-cell-4-0-0">
+                                                <span>帖子标题</span>
+                                            </div>
+                                        </th>
+                                        <th data-field="collection_timestamp" data-key="4-0-1" class="">
+                                            <div class="layui-table-cell laytable-cell-4-0-1" align="center">
+                                                <span>收藏时间</span>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="layui-table-body layui-table-main">
+                                <table cellspacing="0" cellpadding="0" border="0" class="layui-table" lay-skin="line">
+                                    <tbody></tbody>
+                                </table>
+                                <div class="layui-none">无数据</div>
+                            </div>
+                        </div>
+                        <div class="layui-table-page layui-hide">
+
+                        </div>
+                        <style>
+                            .laytable-cell-4-0-0{  }
+                            .laytable-cell-4-0-1{
+                                width: 120px;
+                            }
+                        </style>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>layui.cache.page = 'user';layui.cache.user = {  username: 'uab'  ,uid: 48759648  ,avatar: '//res.layui.com/images/fly/avatar/5.jpg'  ,experience: 20  ,sum: 0  ,vip: 0  ,sex: ''};layui.config({  version: "1572523669924"}).extend({  'fly': '//res.layui.com/static/lay/modules/fly/index'}).use('fly');</script>
+<script>var _hmt = _hmt || [];(function() {  var hm = document.createElement("script");  hm.src = "https://hm.baidu.com/hm.js?d214947968792b839fd669a4decaaffc";  var s = document.getElementsByTagName("script")[0];   s.parentNode.insertBefore(hm, s);})();</script>
+</body>
+</html>

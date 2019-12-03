@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seecen.dao.INoteBookDao">
+  <resultMap id="notebookMap" type="com.seecen.domain.NoteBook">
+    <id column="NOTEBOOK_ID" jdbcType="DECIMAL" property="notebookId" />
+    <result column="NOTEBOOK_NAME" jdbcType="VARCHAR" property="notebookName" />
+    <result column="NB_VALID" jdbcType="DECIMAL" property="nbValid" />
+    <result column="TITLE" jdbcType="VARCHAR" property="noteTitle" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="noteContent" />
+    <result column="NB_VALID" jdbcType="DECIMAL" property="notenValid" />
+    <result column="COLLECTION" jdbcType="DECIMAL" property="noteCollecion" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    NOTEBOOK_ID, NOTEBOOK_NAME, NB_VALID,TITLE,CONTENT,NB_VALID,COLLECTION
+  </sql>
+
+  <insert id="save" parameterType="notebook">
+    insert into  TAB_NOTEBOOK
+    values (SEQUENCE_TAB_NOTEBOOK.nextval,#{notebookName,jdbcType=VARCHAR},1)
+  </insert>
+
+  <select id="list" parameterType="notebookBo" resultMap="notebookMap">
+    SELECT nb.*,nn.note_id,nn.title,nn.content,nn.n_valid,nn.collection
+    FROM tab_notebook nb LEFT JOIN (SELECT notebook_id,note_id,CONTENT,title,n_valid,collection FROM tab_note
+    WHERE n_valid=1) nn ON nb.notebook_id=nn.notebook_id
+    <trim>
+      <where>
+        NB_VALID=1
+        <if test="notebook.notebookId!=null and notebook.notebookId != ''">
+          and NB.NOTEBOOK_ID like '%${notebook.notebookId}%'
+        </if>
+        <if test="notebook.notebookName!=null  and notebook.notebookName != ''">
+          and NB.NOTEBOOK_NAME like '%${notebook.notebookName}%'
+        </if>
+        <if test="notebook.nbValid!=null and notebook.nbValid != ''">
+          and NB.NB_VALID like  '%${notebook.nbValid}%'
+        </if>
+
+        <if test="note.noteId!=null and note.noteId != ''">
+          and NN.NOTE_ID like  '%${note.noteId}%'
+        </if>
+        <if test="note.title!=null and note.title != ''">
+          and NN.TITLE like  '%${note.title}%'
+        </if>
+        <if test="note.content!=null and note.content != ''">
+          and NN.CONTENT like  '%${note.content}%'
+        </if>
+        <if test="note.nValid!=null and note.nValid != ''">
+          and NN.N_VALID like  '%${note.nValid}%'
+        </if>
+        <if test="note.collection!=null and note.collection != ''">
+          and NN.COLLECTION like  '%${note.collection}%'
+        </if>
+      </where>
+    </trim>
+  </select>
+
+
+
+</mapper>

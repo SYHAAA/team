@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seecen.dao.SubscriberDao">
+  <resultMap id="BaseResultMap" type="com.seecen.pojo.Subscriber">
+    <id column="USER_ID" jdbcType="DECIMAL" property="userId" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="SIGN" jdbcType="VARCHAR" property="sign" />
+    <result column="AVATAR" jdbcType="VARCHAR" property="avatar" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="CUSTOMER_ID" jdbcType="DECIMAL" property="customerId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    USER_ID, USER_NAME, SIGN, AVATAR, STATUS, CUSTOMER_ID
+  </sql>
+
+    <select id="getById" resultMap="BaseResultMap" parameterType="int">
+     SELECT * FROM t_subscriber where user_id = #{id}
+    </select>
+
+    <update id="updatesign" parameterType="subscriber">
+        update t_subscriber set SIGN =#{sign} where USER_ID =#{userId}
+    </update>
+
+  <update id="updatestatus" parameterType="subscriber">
+        update t_subscriber set STATUS =#{status} where USER_ID =#{userId}
+    </update>
+
+  <select id="friendList" parameterType="int" resultMap="BaseResultMap">
+   select  s.* from t_friend f left join t_friend_type t on f.type_id = t.type_id left join
+   t_subscriber s on f.friend_id = s.user_id where f.user_id =#{userId} and t.type_id =#{typeIds}
+  </select>
+
+    <select id="groupUser" parameterType="int" resultMap="BaseResultMap">
+    select s.* from t_group_user g left join
+    t_subscriber s on g.user_id =  s.user_id where g.group_id = #{id}
+    </select>
+
+    <select id="getowner" parameterType="int" resultMap="BaseResultMap">
+      select s.* from t_group g left join t_subscriber s on g.user_id = s.user_id
+       where group_id = #{id}
+    </select>
+
+  <select id="getStranger" parameterType="int" resultMap="BaseResultMap">
+    select * from t_subscriber s where
+    user_id != #{id} and user_id not in
+     (select friend_id from t_friend where user_id =#{id})
+  </select>
+
+
+</mapper>

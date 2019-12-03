@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seecen.dao.SubjectBankDao">
+    <resultMap id="BaseResultMap" type="SubjectBank">
+        <id column="SUBJECT_ID" property="subjectId"></id>
+        <result column="SUBJECT_POINTS" property="subjectPoints"></result>
+        <result column="TYPE_NAME" property="subjectType"></result>
+        <result column="SUBJECT_CONTENT" property="subjectContent"></result>
+        <result column="SUBJECT_OPTION" property="subjectOption"></result>
+        <result column="SUBJECT_ANSWER" property="subjectAnswer"></result>
+        <result column="SUBJECT_ANALYTICAL" property="subjectAnalytical"></result>
+        <result column="CREATE_TIME" property="createTime"></result>
+        <result column="VALID" property="valid"></result>
+    </resultMap>
+    <sql id="BaseSql">
+        SUBJECT_ID,SUBJECT_POINTS,TYPE_NAME,SUBJECT_CONTENT,SUBJECT_OPTION,SUBJECT_ANSWER,SUBJECT_ANALYTICAL,CREATE_TIME,VALID
+    </sql>
+
+    <select id="findAll" resultMap="BaseResultMap">
+      SELECT <include refid="BaseSql"/> FROM TB_SUBJECTBANK sb LEFT JOIN TB_SUBJECTTYPE st ON sb.SUBJECT_TYPE=st.type_id
+        <where>
+            <![CDATA[
+                    and VALID=1
+                ]]>
+        </where>
+    </select>
+</mapper>

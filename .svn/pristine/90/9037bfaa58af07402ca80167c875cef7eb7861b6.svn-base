@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>帖子详细信息和回帖页面</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/pages/lib/layui/css/layui.css" >
+    <link rel="stylesheet" href="/pages/lib/layui/css/modules/laydate/default/laydate.css" >
+    <link rel="stylesheet" href="/pages/lib/layui/css/layui.global.css"  >
+    <!--<link rel="stylesheet" href="/pages/lib/layui/lay/modules/layedit.js"  >-->
+    <!--<link rel="stylesheet" href="/pages/lib/layui/layui.all.js"  >-->
+    <script src="/pages/js/jquery.min.js"></script>
+    <script src="/pages/lib/layui/layui.js"></script>
+
+
+</head>
+<style>
+    *{ padding: 0px; margin: 0px;}
+    #bigbox{
+        background-color: rgb(220,239,254);
+        width: 100%;
+        height: 100%;
+    }
+    #boxcontent{
+        width: 930px;
+        height: 100%;
+        background-color: rgb(255,255,255);
+        margin-left: 18%;
+    }
+</style>
+<script>
+    layui.use(['layer', 'form', 'laypage', 'table','laydate','layedit'], function() {
+        var layedit = layui.layedit
+            , form = layui.form
+            , laypage = layui.laypage
+            , table = layui.table
+            , laydate = layui.laydate
+            ,layer = layui.layer
+            ,laypage = layui.laypage;
+        // 富文本
+        var router = layui.router();
+        var id = router.search.id;
+        var title = router.search.title;
+        var rlynum = router.search.rlynum;
+        var rlyContent = router.search.rlyContent;
+        var result = router.search.result;
+        var postId = router.search.postId;
+        var username =router.search.username;
+
+        //alert(id+title+rlynum+rlyContent);
+        var  m = "<div>"+title+"</div>";
+        $("#title").append(m);
+        var rl = "<a>"+rlynum+"</a>";
+        $("#rlynum").append(rl);
+        var jo = "<p>"+rlyContent+"</p>";
+        $("#neirong").append(jo);
+        var ll = "<span>"+username+"</span>"
+        $("#rlyContent").append(ll)
+
+        //var id=router.search.id;
+
+
+            // if (result == 1) parent.layui.table.reload('noteTable');
+
+            table.render({
+                elem: '#atitle',
+                url: '/replyMessage/find.action'
+                , page: true //开启分页
+                , toolbar: 'default'
+                , totalRow: true
+                , parseData: function (res) {
+                    return {
+                        "code": 0, //解析接口状态
+                        "count": res.length, //解析数据长度
+                        "data": res //解析数据列表
+                    };
+                },
+                request: {
+                    pageName: 'pageNum' //页码的参数名称，默认：page
+                    , limitName: 'pageSize' //每页数据量的参数名，默认：limit
+                },
+                cols: [[
+                    {title: '序号', width: 30, type: 'numbers'},
+                    {field: 'id', hide: false, title: 'id'},
+                    {field: 'title', title: '主题名'},
+                    {field: 'rlyContent', title: '回复内容'},
+                    {field: 'zan', title: '赞'},
+                    {field: 'createdate', title: '创建时间'},
+                    {field: 'rlynum', title: '回复量'},
+                    {field: 'valid', title: '是否有效'},
+                ]],
+            });
+
+
+                    layedit.set({
+                        image: {
+                            url: '/file/image.action' //接口url
+                            , type: 'post'
+                        },
+                tool: [
+
+            'image',//原版上传图片
+            'images'//多图上传
+            , 'image_alt'//上传图片拓展
+            , 'attachment'//上传附件
+            ,'anchors' //锚点
+            ,'customlink'//插入自定义链接
+            ,'fullScreen'//全屏
+            ,'preview'//预览
+    ],
+
+            });
+
+        // var index = layedit.build('dopdop',{
+        //     height: 400,
+        //     width:800
+        // }); //建立编辑器
+            //建立编辑器
+        //总页数大于页码总数
+        // laypage.render({
+        //     elem: 'demo0'
+        //     ,count: 70 //数据总数
+        //     ,jump: function(obj){
+        //         console.log(obj)
+        //     }
+        // });
+        $.get("/replyMessage/initById/"+id+".action",null,function (res) {
+            //给表单赋值
+            form.val("formTest",{//formTest 即 class="layui-form" 所在元素属性 lay-filter="" 对应的值
+                "customerid":res.customerid,
+                "title":res.title
+            },"json");
+        },"json");
+
+
+        $.get("/reply/find.action",null,function (res) {
+            form.val("fm-filter",{
+                "rlyContent":res.rlyContent,
+                "username":res.username
+            },"json")
+        },"json");
+
+
+        // $.ajax({
+        //     type:"get",
+        //     url:"/reply/find.action",
+        //     //content:"/pages/post_look_show.html",
+        //     async:true,
+        //     dataType:'json',
+        //     success: function(res){
+        //         //alert(res);
+        //         for (var itemValue of res){
+        //             var sttr = "<div>"+itemValue.username+"</div>";
+        //                 $("#huifu").append(sttr)
+        //         }
+        //     }
+        // });
+
+    });
+</script>
+
+
+<body>
+
+
+<div id="bigbox">
+    <div id="boxcontent">
+
+        <div id="backimg"><img src="images/baimg.jpg" style=" width: 930px;
+        height: 230px;"></div>
+        <div style="float: right; margin-top: 45px">
+            <input type="button"  class="layui-btn layui-btn-normal layui-btn-sm" value="只看楼主" />
+            <input type="button"  class="layui-btn layui-btn-normal layui-btn-sm" value="收藏" />
+            <input type="button"  class="layui-btn layui-btn-normal layui-btn-sm" value="回复" />
+        </div>
+        <!--<span class="layui-badge layui-bg-blue">置顶</span>-->
+        <!--<span class="layui-badge layui-bg-red">精</span>-->
+
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 40px;">
+            <legend>思诚二组吧</legend>   <!--这边放帖子的主题-->
+        </fieldset>
+
+        <div class="fly-header layui-bg-black">
+            <div class="layui-container">
+                <a class="fly-logo" href="/">
+                    <img src="images/logo.jpg" alt="layui" style="width: 70px; height: 70px;">
+                </a>
+                <ul class="layui-nav fly-nav layui-hide-xs">
+                    <li class="layui-nav-item layui-this">
+                        <a href="/"><i class="iconfont icon-jiaoliu"></i>交流</a>
+                    </li>
+                    <li class="layui-nav-item">
+                        <a href="../case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
+                    </li>
+                    <li class="layui-nav-item">
+                        <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>框架</a>
+                    </li>
+                </ul>
+
+                <ul class="layui-nav fly-nav-user">
+
+                    <li class="layui-nav-item">
+                        <a class="fly-nav-avatar" href="javascript:;">
+                            <cite class="layui-hide-xs">贤心</cite>
+                            <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
+                            <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
+                            <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="../user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+                            <dd><a href="../user/message.html"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+                            <dd><a href="../user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+                            <hr style="margin: 5px 0;">
+                            <dd><a href="" style="text-align: center;">退出</a></dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="layui-hide-xs">
+            <div class="fly-panel fly-column">
+                <div class="layui-container">
+                    <ul class="layui-clear">
+                        <li class="layui-hide-xs"><a href="/pages/test.html">首页</a></li>
+                        <li class="layui-this"><a href="">提问</a></li>
+                        <li><a href="">分享<span class="layui-badge-dot"></span></a></li>
+                        <li><a href="">讨论</a></li>
+                        <li><a href="">建议</a></li>
+                        <li><a href="">公告</a></li>
+                        <li><a href="">动态</a></li>
+                        <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
+
+                        <!-- 用户登入后显示 -->
+                        <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="/pages/send_post.html">我发表的贴</a></li>
+                        <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="../user/index.html#collection">我收藏的贴</a></li>
+
+                        <li>
+
+                            <a href="addTiezi.html" class="layui-btn" style=" ">发表新帖</a>
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-container">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md8 content detail">
+                    <div class="fly-panel detail-box">
+
+<form  class="layui-form" lay-filter="formTest" method="post">
+                    <input type="hidden"  id="id" name="id" >
+
+                        <div  name="customerid"></div>
+                        <h2  id="title"></h2>
+
+
+</form>
+
+                        <div class="fly-detail-info" >
+                            <!-- <span class="layui-badge">审核中</span> -->
+                            <span class="layui-badge layui-bg-green fly-detail-column">动态</span>
+
+                            <span class="layui-badge" style="background-color: #999;">未结</span>
+                            <!-- <span class="layui-badge" style="background-color: #5FB878;">已结</span> -->
+
+                            <span class="layui-badge layui-bg-black">置顶</span>
+                            <span class="layui-badge layui-bg-red">精帖</span>
+
+                            <div class="fly-admin-box" data-id="123">
+                                <span class="layui-btn layui-btn-xs jie-admin" type="del">删除</span>
+
+                                <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="1">置顶</span>
+                                <!-- <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="0" style="background-color:#ccc;">取消置顶</span> -->
+
+                                <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="1">加精</span>
+                                <!-- <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="0" style="background-color:#ccc;">取消加精</span> -->
+                            </div>
+                            <span class="fly-list-nums">
+            <a href="#comment" id="rlynum"><i class="iconfont" title="回答">&#xe60c;</i></a>
+            <i class="iconfont" title="人气">&#xe60b;</i> 99999
+          </span>
+                        </div>
+                        <div class="detail-about">
+                            <a class="fly-avatar" href="../user/home.html">
+                                <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt="贤心">
+                            </a>
+                            <div class="fly-detail-user">
+                                <a href="../user/home.html" class="fly-link">
+                                    <cite>贤心</cite>
+                                    <i class="iconfont icon-renzheng" title="认证信息：{{ rows.user.approve }}"></i>
+                                    <i class="layui-badge fly-badge-vip">VIP3</i>
+                                </a>
+                                <span>2017-11-30</span>
+                            </div>
+                            <div class="detail-hits" id="LAY_jieAdmin" data-id="123">
+                                <span style="padding-right: 10px; color: #FF7200">悬赏：60飞吻</span>
+                                <span class="layui-btn layui-btn-xs jie-admin" type="edit"><a href="add.html">编辑此贴</a></span>
+                            </div>
+                        </div>
+                        <div class="detail-body photos">
+                            <p id="neirong">
+
+
+
+                            </p>
+                            <p>更新日志：</p>
+                            <pre>
+    # v3.0 2017-11-30
+* 采用 layui 2.2.3 作为 UI 支撑
+* 全面同步最新的 Fly 社区风格，各种细节得到大幅优化
+* 更友好的响应式适配能力
+</pre>
+
+                            下载<hr>
+                            <p>
+                                官网：<a href="http://www.layui.com/template/fly/" target="_blank">http://www.layui.com/template/fly/</a><br>
+                                码云：<a href="https://gitee.com/sentsin/fly/" target="_blank">https://gitee.com/sentsin/fly/</a><br>
+                                GitHub：<a href="https://github.com/layui/fly" target="_blank">https://github.com/layui/fly</a>
+                            </p>
+                            封面<hr>
+                            <p>
+                                <!--<img src="/images/fly.jpg" alt="Fly社区">-->
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="fly-panel detail-box" id="flyReply">
+                        <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
+                            <legend>回帖</legend>
+                        </fieldset>
+
+                        <div>
+                            <div id="kpkp">
+                                <div id="sbsb"></div>
+                            </div>
+
+                        </div>
+
+                        <script>
+                            var i =0;
+                        $(function open(){
+                            $.ajax({
+                                type:"get",
+                                url:"/reply/find.action",
+                                //content:"/pages/post_look_show.html",
+                                async:true,
+                                dataType:'json',
+                                success: function(res) {
+
+                                    //alert(res);
+                                    for (var itemValue of res) {
+                                        var str = " <div class=\"jieda\" id=\"jieda\"> " +
+                                            " <li data-id=\"111\" class=\"jieda-daan\"> " +
+                                            "    <a name=\"item-1111111111\"></a> " +
+                                            "   <div class=\"detail-about detail-about-reply\"> " +
+                                            "     <a class=\"fly-avatar\" href=\"\"> " +
+                                            "         <img src=\"https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg\" alt=\" \"> " +
+                                            "        </a> " +
+                                            "           <div class=\"fly-detail-user\"> " +
+                                            "               <a href=\"\" class=\"fly-link\"> " +
+                                            "                  <cite>" + itemValue.username + "</cite> " +
+                                            "                   <i class=\"iconfont icon-renzheng\" title=\"认证信息：XXX\"></i>" +
+                                            "              </a> " +
+                                            //"              <span name=\"rlyContent\" id=\"rlyContent\"></span>"+
+                                            "           </div> " +
+
+                                            "           <div class=\"detail-hits\"> " +
+                                            "               <span>" + itemValue.rlyTime + "</span> " +
+                                            "           </div> " +
+                                            "        </div> " +
+                                            "       <div class=\"detail-body jieda-body photos\"> " +
+                                            "           <p id=\"opop\">"+itemValue.rlyContent+"</p> " +
+                                            "       </div> " +
+                                            "       <div class=\"jieda-reply\"> " +
+                                            "     <span class=\"jieda-zan zanok\" type=\"zan\">" +
+                                            "    <i class=\"iconfont icon-zan\"></i> " +
+                                            "    <em>66</em> " +
+                                            "     </span> " +
+                                            "    <span type=\"reply\" > " +
+                                            "    <i class=\"iconfont icon-svgmoban53\"></i> " +
+                                            "           <a class= \""+i+"huifu\" type='button'>  回复  </a> " +
+                                            "  </span> " +
+                                            "  <div class=\"jieda-admin\"> " +
+                                            "   <span type=\"edit\">编辑</span> " +
+                                            "     <span type=\"del\">删除</span> " +
+                                            "    </div> " +
+                                            "      </div> " +
+                                            "   </li> " +
+                                            " </div>";
+
+                                        $("#kpkp").append(str);
+
+                                        var str2=    " <div class=\"layui-form layui-form-pane\" style='display:block' class='"+i+"mydiv' > "+
+                                            " <form action=\"/reply/add.action\" method=\"post\" id='tijiao'>"+
+                                            "<div class=\"layui-form-item layui-form-text\">"+
+                                            " <a name=\"comment\"></a>"+
+                                            "  <div class=\"layui-input-block\">"+
+                                            // "     <div class=\"layui-unselect fly-edit\">"+
+                                            " <textarea id=\"L_content\" name=\"rlyContent\" required lay-verify=\"required\" placeholder=\"请输入内容\"  class=\"layui-textarea fly-editor\" style=\"height: 150px;\"></textarea>"+
+                                            // "  </div>"+
+                                            "  </div>"+
+                                            "  </div>"+
+                                            "  <div class=\"layui-form-item\">"+
+                                            "   <input type=\"hidden\" name=\"postId\" value="+itemValue.postId+">"+
+                                            "   <input type=\"hidden\" name=\"floorNum\" >"+
+                                            "   <input type=\"hidden\" name=\"reuserName\" >"+
+                                            "   <input type=\"hidden\" name=\"username\" value="+itemValue.username+">"+
+                                            "   <input type=\"hidden\" name=\"facePath\" value="+itemValue.facePath+">"+
+                                            "  <button class=\"layui-btn\" lay-filter=\"*\" lay-submit type='submit' id=\"addbtn\">提交回复</button>"+
+                                            "</div>"+
+                                            " </form>"+
+                                            " </div>";
+                                        $("#kpkp").append(str2);
+
+                                            i++;
+                                        //layui.layedit.setContent('#dopdop',username)
+                                    }
+
+
+                                    //});
+                                }
+                            });
+
+                            //
+                            // $(function open(){
+                            //     $.ajax({
+                            //         type:"get",
+                            //         url:"/reply/find.action",
+                            //         //content:"/pages/post_look_show.html",
+                            //         async:true,
+                            //         dataType:'json',
+                            //         success: function(res) {
+                            //             //alert(res);
+                            //             for (var itemValue of res) {
+
+                                $("."+i+"huifu").click(function() {
+                                    $("."+i+"mydiv").css.display="block";
+
+                            });
+                        });
+
+                    </script>
+
+                        <script>
+                            $("#addbtn").click(function () {
+                                $("#tijiao").submit;
+                            });
+                            // $(".huifu").click(function () {
+                            //     $("#mydiv").css.display='block';
+                            // })
+                            //
+                            // $(document).ready(function(e) {
+                            //     $(".huifu").click(function(e) {
+                            //         if( $("#mydiv").hasClass("show") ){
+                            //             // 执行隐藏
+                            //             $("#mydiv").hide().removeClass("show");
+                            //             // 其他
+                            //         }else{
+                            //             // 显示
+                            //             $("#mydiv").show().addClass("show");
+                            //         }
+                            //     });
+                            // });
+                        </script>
+
+                        <!--<form action="/jie/reply/" method="post" lay-filter="fm-filter" class="layui-form">-->
+
+                            <!--<div class="layui-form-item"  style="width: 800px; height:380px;">-->
+
+                                    <!--<textarea id="dopdop">-->
+                                    <!--</textarea>-->
+                            <!--</div>-->
+
+                            <!--<div class="layui-form-item">-->
+                                <!--<input type="hidden" name="jid" value="123">-->
+                                <!--<button class="layui-btn" lay-filter="*" lay-submit>提交回复</button>-->
+                            <!--</div>-->
+                        <!--</form>-->
+
+                    </div>
+                </div>
+                </div>
+                </div>
+
+                </div>
+                </div>
+
+</body>
+</html>

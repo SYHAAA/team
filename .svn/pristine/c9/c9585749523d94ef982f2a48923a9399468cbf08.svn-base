@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seecen.dao.SubjectBankDao">
+    <resultMap id="BaseResultMap" type="SubjectBank">
+        <id column="SUBJECT_ID" property="subjectId"></id>
+        <result column="SUBJECT_POINTS" property="subjectPoints"></result>
+        <result column="TYPE_NAME" property="subjectType.typeName"></result>
+        <result column="SUBJECT_CONTENT" property="subjectContent"></result>
+        <result column="SUBJECT_OPTION" property="subjectOption"></result>
+        <result column="SUBJECT_ANSWER" property="subjectAnswer"></result>
+        <result column="SUBJECT_ANALYTICAL" property="subjectAnalytical"></result>
+        <result column="CREATE_TIME" property="createTime"></result>
+        <result column="VALID" property="valid"></result>
+    </resultMap>
+
+    <resultMap id="TypeMap" type="SubjectType">
+        <id column="TYPE_ID" property="typeId"></id>
+        <result column="TYPE_NAME" property="typeName"></result>
+    </resultMap>
+
+    <sql id="BaseSql">
+        SUBJECT_ID,SUBJECT_POINTS,TYPE_NAME,SUBJECT_CONTENT,SUBJECT_OPTION,SUBJECT_ANSWER,SUBJECT_ANALYTICAL,CREATE_TIME,VALID
+    </sql>
+
+    <sql id="SubjectSql">
+        SUBJECT_ID,SUBJECT_POINTS,SUBJECT_CONTENT,SUBJECT_OPTION,SUBJECT_ANSWER,SUBJECT_ANALYTICAL
+    </sql>
+
+    <sql id="TypeSql">
+        TYPE_ID,TYPE_NAME
+    </sql>
+
+    <select id="findAllWithPage" resultMap="BaseResultMap" parameterType="SubjectBank">
+      SELECT <include refid="BaseSql"/> FROM tb_subjectbank sb LEFT JOIN tb_subjecttype st ON sb.SUBJECT_TYPE=st.type_id
+        <where>
+            <if test="startTime != null">
+                AND CREATE_TIME >= #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND #{endTime} >= CREATE_TIME
+            </if>
+            <if test="subjectContent != null">
+                AND SUBJECT_CONTENT LIKE '%${subjectContent}%'
+            </if>
+            <if test="subjectPoints != null">
+                AND SUBJECT_POINTS = #{subjectPoints}
+            </if>
+            <if test="subjectType.typeId != null">
+                AND TYPE_ID = #{subjectType.typeId}
+            </if>
+            <![CDATA[
+                    and VALID=1 ORDER BY CREATE_TIME DESC
+                ]]>
+        </where>
+    </select>
+
+    <select id="findAllSubjectType" resultMap="TypeMap">
+        SELECT <include refid="TypeSql"/> FROM TB_SUBJECTTYPE
+    </select>
+
+    <select id="findAllSubjectPoints" resultType="String">
+        SELECT DISTINCT SUBJECT_POINTS FROM TB_SUBJECTBANK
+    </select>
+
+    <update id="deleteSubject" parameterType="int">
+        UPDATE TB_SUBJECTBANK SET VALID=0 WHERE SUBJECT_ID=#{id}
+    </update>
+
+    <insert id="saveSubject" parameterType="SubjectBank">
+        INSERT INTO TB_SUBJECTBANK VALUES (SEQ_SUBJECTBANK.nextval,#{subjectType.typeId},#{subjectPoints,jdbcType=VARCHAR},#{subjectContent,jdbcType=VARCHAR},#{subjectOption,jdbcType=VARCHAR},#{subjectAnswer,jdbcType=VARCHAR},SYSDATE,1,#{subjectAnalytical,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="findSubjectById" parameterType="int" resultMap="BaseResultMap">
+        SELECT <include refid="SubjectSql"/> FROM TB_SUBJECTBANK WHERE SUBJECT_ID=#{id}
+    </select>
+
+    <update id="updateJudgeSubject" parameterType="SubjectBank">
+        UPDATE TB_SUBJECTBANK SET SUBJECT_POINTS=#{subjectPoints,jdbcType=VARCHAR},SUBJECT_CONTENT=#{subjectContent,jdbcType=VARCHAR},SUBJECT_ANSWER=#{subjectAnswer,jdbcType=VARCHAR},SUBJECT_ANALYTICAL=#{subjectAnalytical,jdbcType=VARCHAR} WHERE SUBJECT_ID=#{subjectId}
+    </update>
+
+    <update id="updateBrieflySubject" parameterType="SubjectBank">
+        UPDATE TB_SUBJECTBANK SET SUBJECT_POINTS=#{subjectPoints,jdbcType=VARCHAR},SUBJECT_CONTENT=#{subjectContent,jdbcType=VARCHAR},SUBJECT_ANSWER=#{subjectAnswer,jdbcType=VARCHAR} WHERE SUBJECT_ID=#{subjectId}
+    </update>
+
+    <update id="updateCheckSubject" parameterType="SubjectBank">
+        UPDATE TB_SUBJECTBANK SET SUBJECT_POINTS=#{subjectPoints,jdbcType=VARCHAR},SUBJECT_CONTENT=#{subjectContent,jdbcType=VARCHAR},SUBJECT_OPTION=#{subjectOption,jdbcType=VARCHAR},SUBJECT_ANSWER=#{subjectAnswer,jdbcType=VARCHAR},SUBJECT_ANALYTICAL=#{subjectAnalytical,jdbcType=VARCHAR} WHERE SUBJECT_ID=#{subjectId}
+    </update>
+</mapper>

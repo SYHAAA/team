@@ -1,0 +1,12 @@
+package com.seecen.dao;
+
+import com.seecen.domain.User;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UserDao {
+
+    User findByName(String userName);
+
+    void save(User user);
+}

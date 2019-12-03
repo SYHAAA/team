@@ -1,0 +1,21 @@
+* {
+	margin: 0;
+	padding: 0;
+	font-family: 微软雅黑;
+}
+
+.t1 {
+	margin-left: 0px;
+	text-align: center;
+	font-size: 12px;
+	background-color: #46586a;
+	color: #CAD0D9;
+	padding: 10px 0px;
+	border-radius:5px;
+	width:980px;
+}
+
+a {
+	color: #CAD0D9;
+	font-weight:bold;
+}

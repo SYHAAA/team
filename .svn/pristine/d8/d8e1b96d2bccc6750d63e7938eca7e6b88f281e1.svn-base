@@ -1,0 +1,20 @@
+package com.seecen.dao;
+
+import com.seecen.domain.Post;
+import org.springframework.stereotype.Repository;
+import java.util.List;
+
+@Repository
+public interface IPostDao {
+    List<Post> list(Post post);
+
+    Post initById(Integer postId);
+
+    void logicDeleteByMore(Integer[] postIds);
+
+    void essence(Integer postId);
+
+    void top(Integer postId);
+
+
+}

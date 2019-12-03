@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seecen.dao.UserFloorsDao">
+  <resultMap id="BaseResultMap" type="com.seecen.bo.UserRefloorsBo">
+    <association property="userRloors" javaType="com.seecen.domain.UserRloors">
+    <id column="REFID" jdbcType="DECIMAL" property="refid" />
+    <result column="USER_ID" jdbcType="DECIMAL" property="userId" />
+    <result column="REUSER_ID" jdbcType="DECIMAL" property="reuserId" />
+    <result column="FLOOR_ID" jdbcType="DECIMAL" property="floorId" />
+    <result column="REFLOORCONTENT" jdbcType="VARCHAR" property="refloorcontent" />
+    <result column="REFLOORTIME" jdbcType="TIMESTAMP" property="refloortime" />
+    <result column="VALID" jdbcType="DECIMAL" property="valid" />
+    </association>
+    <association property="tieziMessage" javaType="com.seecen.domain.TieziMessage">
+      <id column="ID" jdbcType="NUMERIC" property="id" />
+      <result column="CUSTOMERID" jdbcType="NUMERIC" property="customerid" />
+      <result column="TITLE" jdbcType="VARCHAR" property="title" />
+      <result column="RLY_CONTENT" jdbcType="VARCHAR" property="rlyContent" />
+      <result column="ZAN" jdbcType="NUMERIC" property="zan" />
+      <result column="CREATEDATE" jdbcType="TIMESTAMP" property="createdate" />
+      <result column="RLYNUM" jdbcType="NUMERIC" property="rlynum" />
+      <result column="VALID" jdbcType="NUMERIC" property="valid" />
+    </association>
+    <association property="reviewerInformation" javaType="com.seecen.domain.ReviewerInformation">
+      <id column="PLA_ID" jdbcType="NUMERIC" property="plaid" />
+      <result column="RLY_ID" jdbcType="NUMERIC" property="rlyid" />
+      <result column="RLY_CONTENT" jdbcType="VARCHAR" property="rlyContent" />
+      <result column="REP_TIME" jdbcType="TIMESTAMP" property="reptime" />
+      <result column="VALID" jdbcType="NUMERIC" property="valid" />
+  </association>
+      <association property="tabUser" javaType="com.seecen.domain.TabUser">
+          <id column="USER_ID" jdbcType="NUMERIC" property="userid" />
+          <result column="USER_NAME" jdbcType="VARCHAR" property="username" />
+          <result column="CLASS_ID" jdbcType="NUMERIC" property="classid" />
+          <result column="BIRTHDAY" jdbcType="TIMESTAMP" property="birthday" />
+          <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+          <result column="GENDER" jdbcType="VARCHAR" property="gender" />
+          <result column="TELEPHONE" jdbcType="VARCHAR" property="telephone" />
+          <result column="ISADMIN" jdbcType="VARCHAR" property="isadmin" />
+          <result column="FACE_PATH" jdbcType="VARCHAR" property="facepath" />
+          <result column="VALID" jdbcType="VARCHAR" property="valid" />
+      </association>
+  </resultMap>
+  <!--<sql id="Base_Column_List">-->
+    <!--REFID, USER_ID, REUSER_ID, FLOOR_ID, REFLOORCONTENT, REFLOORTIME, VALID-->
+  <!--</sql>-->
+  <!--<sql id="tieziMessage">-->
+    <!--ID, CUSTOMERID, TITLE, RLY_CONTENT, ZAN, CREATEDATE, RLYNUM, VALID-->
+  <!--</sql>-->
+  <!--<select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">-->
+    <!--select -->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from TAB_REFLOORS-->
+    <!--where REFID = #{refid,jdbcType=DECIMAL}-->
+  <!--</select>-->
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">-->
+    <!--delete from TAB_REFLOORS-->
+    <!--where REFID = #{refid,jdbcType=DECIMAL}-->
+  <!--</delete>-->
+  <!--<insert id="insert" parameterType="com.seecen.domain.UserRloors">-->
+    <!--insert into TAB_REFLOORS (REFID, USER_ID, REUSER_ID, -->
+      <!--FLOOR_ID, REFLOORCONTENT, REFLOORTIME, -->
+      <!--VALID)-->
+    <!--values (#{refid,jdbcType=DECIMAL}, #{userId,jdbcType=DECIMAL}, #{reuserId,jdbcType=DECIMAL}, -->
+      <!--#{floorId,jdbcType=DECIMAL}, #{refloorcontent,jdbcType=VARCHAR}, #{refloortime,jdbcType=TIMESTAMP}, -->
+      <!--#{valid,jdbcType=DECIMAL})-->
+  <!--</insert>-->
+  <!--<insert id="insertSelective" parameterType="com.seecen.domain.UserRloors">-->
+    <!--insert into TAB_REFLOORS-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
+      <!--<if test="refid != null">-->
+        <!--REFID,-->
+      <!--</if>-->
+      <!--<if test="userId != null">-->
+        <!--USER_ID,-->
+      <!--</if>-->
+      <!--<if test="reuserId != null">-->
+        <!--REUSER_ID,-->
+      <!--</if>-->
+      <!--<if test="floorId != null">-->
+        <!--FLOOR_ID,-->
+      <!--</if>-->
+      <!--<if test="refloorcontent != null">-->
+        <!--REFLOORCONTENT,-->
+      <!--</if>-->
+      <!--<if test="refloortime != null">-->
+        <!--REFLOORTIME,-->
+      <!--</if>-->
+      <!--<if test="valid != null">-->
+        <!--VALID,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
+      <!--<if test="refid != null">-->
+        <!--#{refid,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="userId != null">-->
+        <!--#{userId,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="reuserId != null">-->
+        <!--#{reuserId,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="floorId != null">-->
+        <!--#{floorId,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="refloorcontent != null">-->
+        <!--#{refloorcontent,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="refloortime != null">-->
+        <!--#{refloortime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="valid != null">-->
+        <!--#{valid,jdbcType=DECIMAL},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.seecen.domain.UserRloors">-->
+    <!--update TAB_REFLOORS-->
+    <!--<set>-->
+      <!--<if test="userId != null">-->
+        <!--USER_ID = #{userId,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="reuserId != null">-->
+        <!--REUSER_ID = #{reuserId,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="floorId != null">-->
+        <!--FLOOR_ID = #{floorId,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="refloorcontent != null">-->
+        <!--REFLOORCONTENT = #{refloorcontent,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="refloortime != null">-->
+        <!--REFLOORTIME = #{refloortime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="valid != null">-->
+        <!--VALID = #{valid,jdbcType=DECIMAL},-->
+      <!--</if>-->
+    <!--</set>-->
+    <!--where REFID = #{refid,jdbcType=DECIMAL}-->
+  <!--</update>-->
+  <!--<update id="updateByPrimaryKey" parameterType="com.seecen.domain.UserRloors">-->
+    <!--update TAB_REFLOORS-->
+    <!--set USER_ID = #{userId,jdbcType=DECIMAL},-->
+      <!--REUSER_ID = #{reuserId,jdbcType=DECIMAL},-->
+      <!--FLOOR_ID = #{floorId,jdbcType=DECIMAL},-->
+      <!--REFLOORCONTENT = #{refloorcontent,jdbcType=VARCHAR},-->
+      <!--REFLOORTIME = #{refloortime,jdbcType=TIMESTAMP},-->
+      <!--VALID = #{valid,jdbcType=DECIMAL}-->
+    <!--where REFID = #{refid,jdbcType=DECIMAL}-->
+  <!--</update>-->
+
+  <select id="list" parameterType="com.seecen.bo.UserRefloorsBo" resultMap="BaseResultMap">
+      SELECT us.face_path,
+       us.user_name,
+       rep.*,
+       wd.customerId,
+       wd.id,
+       fl.post_id
+       FROM t_wdxx wd ,
+       tab_rep_pla rep,
+       tab_user us,
+       tab_floors fl
+       WHERE fl.post_id=wd.id AND
+       rep.rly_id=fl.user_id AND
+       us.user_id=wd.customerid
+  </select>
+
+
+</mapper>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>论坛后台管理</title>
+    <link rel="stylesheet" href="/pages/lib/layui/css/layui.css">
+    <script src="/pages/js/jquery.min.js"></script>
+    <script src="/pages/lib/layui/layui.js"></script>
+
+    <script>
+        function open(title,url){
+            layer.open({
+                type: 2 //此处以iframe举例
+                ,title: title
+                ,area: ['760px', '430px']
+                ,shade: 0.3
+                ,maxmin: true
+                ,offset: ['20px']
+                ,content: url
+                ,yes: function(){
+                    // 提交iframe页面里面的form表单
+                    $("iframe").contents().find("form").submit();
+                    // layui.table.reload('permissionInfoTable');
+                }
+                ,btn2: function(){
+                    layer.close();
+                }
+                ,zIndex: layer.zIndex //重点1
+                ,success: function(layero){
+                    layer.setTop(layero); //重点2
+                }
+            });
+        }
+
+        layui.use(['layer', 'form', 'laypage', 'table','laydate'], function(){
+            var layer = layui.layer
+                ,form = layui.form
+                ,laypage = layui.laypage
+                ,table = layui.table
+                ,laydate = layui.laydate;
+
+            //创建日期
+            laydate.render({
+                elem: '#dateStart'
+                ,type: 'datetime'
+            });
+            laydate.render({
+                elem: '#dateEnd'
+                ,type: 'datetime'
+            });
+
+            //第一个实例
+            table.render({
+                elem: '#postTable'
+                ,url: '/post/post.action' //数据接口
+                ,page: true //开启分页
+                ,totalRow: true //开启合计行
+                ,parseData: function(res) {
+                    return {
+                        "code": 0, //解析接口状态
+                        "count": res.total, //解析数据长度
+                        "data": res.list //解析数据列表
+                    };
+                },
+                request: {
+                    pageName: 'pageNum' //页码的参数名称，默认：page
+                    ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+                }
+                ,cols: [[ //表头
+                    {width:30,type: 'checkbox'}
+                    ,{title:'序号',width:30,type: 'numbers'}
+                    ,{field: 'postId',width:80,title: '帖子Id'}
+                    ,{field: 'customerId',width:80,title: '用户Id'}
+                    ,{field: 'title',width:200, title: '标题'}
+                    ,{field: 'rlyContent',width:586, title: '内容'}
+                    ,{field: 'zan',width:130,title: '获赞量'}
+                    ,{field: 'createDate',width:230, title: '创建时间',templet:'#createDate',sort: true}
+                    ,{field: 'rlynum',width:270,hide: true}
+                    ,{field: 'zhiding',width:270, title: '置顶'}
+                    ,{field: 'jing',width:270, title: '加精' }
+                    ,{fixed: 'right', width: 170, align:'center', toolbar: '#btnBar', title: '操作'}
+                ]]
+            });
+
+
+            //监听行工具事件
+            table.on('tool(postFilter)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                var data = obj.data //获得当前行数据
+                    ,layEvent = obj.event; //获得 lay-event 对应的值
+                if(layEvent === 'essence'){
+                    layer.confirm('设置为精华帖成功', function(inde){
+                        layer.close(inde);
+                        $.post("/post/post/essence.action","postId="+data.postId,function(res){
+                            if(res=="success"){
+                                obj.del();
+                            }
+                        },"text")
+                    });
+                } else if(layEvent === 'istop'){
+                    layer.confirm('确定置顶么', function(index){
+                        layer.close(index);
+                        $.post("/post//post/top.action","postId="+data.postId,function(res){
+                            if(res=="success"){
+                                obj.del();
+                            }
+                        },"text")
+                    });
+                }else if(layEvent === 'del'){
+                    layer.confirm('真的删除行么', function(index){
+                        layer.close(index);
+                        $.post("/post/post/delete.action","postIds="+data.postId,function(res){
+                            if(res=="success"){
+
+                                obj.del();
+                            }
+                        },"text")
+                    });
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+
+<table id="postTable" lay-filter="postFilter">
+    <script type="text/html" id="btnBar">
+        <a class="layui-btn  layui-btn-xs" lay-event="essence">加精</a>
+        <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="istop" >置顶</a>
+        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del" >删除</a>
+        <button style="display:none" lay-submit lay-filter="submitBut" id="submitBut"></button>
+
+    </script>
+</table>
+
+</body>
+</html>

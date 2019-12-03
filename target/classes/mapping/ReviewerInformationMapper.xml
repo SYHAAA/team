@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seecen.dao.ReviewerInformationMapper">
+  <resultMap id="BaseResultMap" type="com.seecen.domain.ReviewerInformation">
+    <id column="PLA_ID" jdbcType="NUMERIC" property="plaId" />
+    <result column="RLY_ID" jdbcType="NUMERIC" property="rlyId" />
+    <result column="RLY_CONTENT" jdbcType="VARCHAR" property="rlyContent" />
+    <result column="UPLEVEL_ID" jdbcType="NUMERIC" property="uplevelId" />
+    <result column="REP_TIME" jdbcType="TIMESTAMP" property="repTime" />
+    <result column="VALID" jdbcType="NUMERIC" property="valid" />
+  </resultMap>
+  <sql id="Base_Column_List">-->
+    PLA_ID, RLY_ID, RLY_CONTENT, UPLEVEL_ID, REP_TIME, VALID
+  </sql>
+
+  <!--<select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">-->
+    <!--select -->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from TAB_REP_PLA-->
+    <!--where PLA_ID = #{plaId,jdbcType=DECIMAL}-->
+  <!--</select>-->
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">-->
+    <!--delete from TAB_REP_PLA-->
+    <!--where PLA_ID = #{plaId,jdbcType=DECIMAL}-->
+  <!--</delete>-->
+  <!--<insert id="insert" parameterType="com.seecen.domain.ReviewerInformation">-->
+    <!--insert into TAB_REP_PLA (PLA_ID, RLY_ID, RLY_CONTENT, -->
+      <!--UPLEVEL_ID, REP_TIME, VALID-->
+      <!--)-->
+    <!--values (#{plaId,jdbcType=DECIMAL}, #{rlyId,jdbcType=DECIMAL}, #{rlyContent,jdbcType=VARCHAR}, -->
+      <!--#{uplevelId,jdbcType=DECIMAL}, #{repTime,jdbcType=TIMESTAMP}, #{valid,jdbcType=DECIMAL}-->
+      <!--)-->
+  <!--</insert>-->
+  <!--<insert id="insertSelective" parameterType="com.seecen.domain.ReviewerInformation">-->
+    <!--insert into TAB_REP_PLA-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
+      <!--<if test="plaId != null">-->
+        <!--PLA_ID,-->
+      <!--</if>-->
+      <!--<if test="rlyId != null">-->
+        <!--RLY_ID,-->
+      <!--</if>-->
+      <!--<if test="rlyContent != null">-->
+        <!--RLY_CONTENT,-->
+      <!--</if>-->
+      <!--<if test="uplevelId != null">-->
+        <!--UPLEVEL_ID,-->
+      <!--</if>-->
+      <!--<if test="repTime != null">-->
+        <!--REP_TIME,-->
+      <!--</if>-->
+      <!--<if test="valid != null">-->
+        <!--VALID,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
+      <!--<if test="plaId != null">-->
+        <!--#{plaId,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="rlyId != null">-->
+        <!--#{rlyId,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="rlyContent != null">-->
+        <!--#{rlyContent,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="uplevelId != null">-->
+        <!--#{uplevelId,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="repTime != null">-->
+        <!--#{repTime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="valid != null">-->
+        <!--#{valid,jdbcType=DECIMAL},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.seecen.domain.ReviewerInformation">-->
+    <!--update TAB_REP_PLA-->
+    <!--<set>-->
+      <!--<if test="rlyId != null">-->
+        <!--RLY_ID = #{rlyId,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="rlyContent != null">-->
+        <!--RLY_CONTENT = #{rlyContent,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="uplevelId != null">-->
+        <!--UPLEVEL_ID = #{uplevelId,jdbcType=DECIMAL},-->
+      <!--</if>-->
+      <!--<if test="repTime != null">-->
+        <!--REP_TIME = #{repTime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="valid != null">-->
+        <!--VALID = #{valid,jdbcType=DECIMAL},-->
+      <!--</if>-->
+    <!--</set>-->
+    <!--where PLA_ID = #{plaId,jdbcType=DECIMAL}-->
+  <!--</update>-->
+  <!--<update id="updateByPrimaryKey" parameterType="com.seecen.domain.ReviewerInformation">-->
+    <!--update TAB_REP_PLA-->
+    <!--set RLY_ID = #{rlyId,jdbcType=DECIMAL},-->
+      <!--RLY_CONTENT = #{rlyContent,jdbcType=VARCHAR},-->
+      <!--UPLEVEL_ID = #{uplevelId,jdbcType=DECIMAL},-->
+      <!--REP_TIME = #{repTime,jdbcType=TIMESTAMP},-->
+      <!--VALID = #{valid,jdbcType=DECIMAL}-->
+    <!--where PLA_ID = #{plaId,jdbcType=DECIMAL}-->
+  <!--</update>-->
+</mapper>

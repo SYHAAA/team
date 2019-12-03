@@ -1,0 +1,115 @@
+package com.seecen.service.impl;
+
+import com.github.pagehelper.PageHelper;
+import com.seecen.dao.ExamDao;
+import com.seecen.dao.SubjectBankDao;
+import com.seecen.domain.Exam;
+import com.seecen.domain.SubjectBank;
+import com.seecen.domain.SubjectType;
+import com.seecen.domain.User;
+import com.seecen.service.ExamService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * @author 沈煜辉
+ * @date 2019/10/27 11:08
+ * @describe 考试模块的service实现类
+ */
+@Service
+public class ExamServiceImpl implements ExamService {
+
+    @Autowired
+    private ExamDao examDao;
+    @Autowired
+    private SubjectBankDao subjectBankDao;
+    @Override
+    public List<Exam> findAllWithPage(Exam exam, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
+        List<Exam> list = examDao.findAllWithPage(exam);
+        return list;
+    }
+
+    @Override
+    public void saveExam(Exam exam) {
+        examDao.saveExam(exam);
+        int examId = exam.getExamId();
+        String select = exam.getSelect();
+        String[] points = select.split(",");
+        if(exam.getRadioNum()>0){
+            List<Integer> radioId = subjectBankDao.findSubjectWithNum(2, points, exam.getRadioNum());
+            for (Integer id : radioId) {
+                examDao.saveExamAndSubject(examId,id,exam.getRadioSource());
+            }
+        }
+        if(exam.getCheckNum()>0){
+            List<Integer> checkId = subjectBankDao.findSubjectWithNum(3, points, exam.getCheckNum());
+            for (Integer id : checkId) {
+                examDao.saveExamAndSubject(examId,id,exam.getCheckSource());
+            }
+        }
+        if(exam.getJudgeNum()>0){
+            List<Integer> judgeId = subjectBankDao.findSubjectWithNum(4, points, exam.getJudgeNum());
+            for (Integer id : judgeId) {
+                examDao.saveExamAndSubject(examId,id,exam.getJudgeSource());
+            }
+        }
+        if(exam.getBriefiyNum()>0){
+            List<Integer> brieflyId = subjectBankDao.findSubjectWithNum(5, points, exam.getBriefiyNum());
+            for (Integer id : brieflyId) {
+                examDao.saveExamAndSubject(examId,id,exam.getBriefiySource());
+            }
+        }
+    }
+
+    @Override
+    public Exam findExamAndSubject(Integer examId) {
+        Exam exam = examDao.findExam(examId);
+        List<SubjectBank> subjects = exam.getSubjects();
+        for (SubjectBank subject : subjects) {
+            if(subject.getSubjectType().getTypeId()==2||subject.getSubjectType().getTypeId()==3){
+                String answer = subject.getSubjectOption();
+                String[] as = answer.split("@#%");
+                if(as.length==3){
+                    subject.setOptionsA(as[0]);
+                    subject.setOptionsB(as[1]);
+                    subject.setOptionsC(as[2]);
+                }
+                if(as.length==4){
+                    subject.setOptionsA(as[0]);
+                    subject.setOptionsB(as[1]);
+                    subject.setOptionsC(as[2]);
+                    subject.setOptionsD(as[3]);
+                }
+            }
+        }
+        return exam;
+    }
+
+    @Override
+    public void deleteExam(Integer examId) {
+        examDao.deleteExam(examId);
+    }
+
+    @Override
+    public List<Exam> findExamWithClass(User user, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
+        int classId = user.getClassId();
+        List<Exam> list = examDao.findExamWithClass(classId);
+        return list;
+    }
+
+    @Override
+    public Exam queryExam(int examId){
+        return examDao.findExam(examId);
+    }
+
+    @Override
+    public Exam findExamById(Integer examId) {
+        return examDao.findExamById(examId);
+    }
+
+
+}

@@ -1,0 +1,4 @@
+package com.seecen.service;
+
+public interface IUserService {
+}

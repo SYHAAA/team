@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seecen.dao.SourceDao">
+    <resultMap id="BaseResultMap" type="ExamRecord">
+        <id column="HISTORY_ID" property="examRecordId" jdbcType="NUMERIC"></id>
+        <result column="USER_NAME" property="user.userName" jdbcType="NUMERIC"></result>
+        <result column="USER_ID" property="user.userId" jdbcType="NUMERIC"></result>
+        <result column="CLASS_ID" property="user.classId" jdbcType="NUMERIC"></result>
+        <result column="EXAM_ID" property="examId" jdbcType="NUMERIC"></result>
+        <result column="EXAM_NAME" property="examName" jdbcType="NUMERIC"></result>
+        <result column="HISTORY_OBJECTIVESOURCE" property="objectiveSource" jdbcType="NUMERIC"></result>
+        <result column="HISTORY_SUBJECTIVESOURCE" property="subjectiveSource" jdbcType="NUMERIC"></result>
+        <result column="HISTORY_EVALUATION" property="evaluation" jdbcType="VARCHAR"></result>
+        <result column="HISTORY_CREATETIME" property="createTime" jdbcType="TIMESTAMP"></result>
+        <result column="HISTORY_REVIEW" property="review" jdbcType="NUMERIC"></result>
+    </resultMap>
+
+    <select id="findAllSource" resultMap="BaseResultMap" parameterType="ExamRecord">
+        SELECT HISTORY_ID,tu.USER_NAME,teh.USER_ID,tu.CLASS_ID,teh.EXAM_ID,te.EXAM_NAME,HISTORY_OBJECTIVESOURCE,HISTORY_SUBJECTIVESOURCE,HISTORY_CREATETIME,HISTORY_REVIEW FROM TB_EXAMHISTORY teh LEFT JOIN TAB_USER tu ON teh.USER_ID=tu.USER_ID LEFT JOIN TB_EXAM te ON teh.EXAM_ID=te.EXAM_ID
+        <where>
+            <if test="user.classId != 0">
+                AND tu.CLASS_ID=#{user.classId}
+            </if>
+            <if test="review != null">
+                AND teh.HISTORY_REVIEW=#{review}
+            </if>
+            <if test="user.userName != null">
+                AND tu.USER_NAME LIKE '%${user.userName}%'
+            </if>
+        </where>
+    </select>
+
+    <update id="updateSource">
+      UPDATE TB_EXAMHISTORY SET HISTORY_SUBJECTIVESOURCE=#{sum},HISTORY_REVIEW=1,HISTORY_EVALUATION=#{evl} WHERE EXAM_ID=#{id} AND USER_ID=#{userId}
+    </update>
+
+    <update id="updateSubjectSource">
+        UPDATE TB_HISTORYSUBJECT SET SUBJECTSOURCE=#{source} WHERE SUJECTID=#{answerId} AND HISTORY_ID=
+          (SELECT DISTINCT HISTORY_ID FROM TB_EXAMHISTORY WHERE EXAM_ID=#{id})
+    </update>
+</mapper>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>收藏夹</title>
+
+    <link rel="stylesheet" href="/pages/lib/layui/css/layui.css">
+    <script src="/pages/js/jquery.min.js"></script>
+    <script src="/pages/lib/layui/layui.js"></script>
+
+    <script>
+        layui.use(['layer', 'form', 'laypage', 'table','laydate'], function(){
+            var layer = layui.layer
+                ,form = layui.form
+                ,laypage = layui.laypage
+                ,table = layui.table
+                ,laydate = layui.laydate;
+
+
+            //创建日期
+            laydate.render({
+                elem: '#dateStart'
+                ,type: 'datetime'
+            });
+            laydate.render({
+                elem: '#dateEnd'
+                ,type: 'datetime'
+            });
+
+            //第一个实例
+            table.render({
+                elem: '#noteTable'
+                ,url: '/note/note/collections.action' //数据接口
+                ,page: true //开启分页
+                // ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档]
+                ,totalRow: true //开启合计行
+                ,parseData: function(res) {
+                    return {
+                        "code": 0, //解析接口状态
+                        "count": res.total, //解析数据长度
+                        "data": res.list //解析数据列表
+                    };
+                },
+                request: {
+                    pageName: 'pageNum' //页码的参数名称，默认：page
+                    ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+                }
+                ,cols: [[ //表头
+                    {width:30,type: 'checkbox'}
+                    ,{title:'序号',width:30,type: 'numbers'}
+                    ,{field: 'noteId',width:30,title:'笔记Id',hide: true}
+                    ,{field: 'notebookId',width:30,title: '笔记本名',hide: true}
+                    ,{field: 'userId',width:30,title: '作者',hide: true}
+                    ,{field: 'nValid',hide: true}
+                    ,{field: 'title', width:270,title: '标题'}
+                    ,{field: 'content',width:486,title: '内容'}
+                    ,{field: 'createDate',width:170,title: '创建时间',templet:'#createDate',sort: true}
+                    ,{field: 'updateDate',width:170, title: '更新时间',templet:'#updateDate',sort: true}
+                    ,{field: 'collection',hide: true}
+                    ,{fixed: 'right', width:170, align:'center', toolbar: '#btnBar', title: '操作'}
+                ]]
+            });
+
+            //监听行工具事件
+            table.on('tool(noteFilter)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                var data = obj.data //获得当前行数据
+                    ,layEvent = obj.event; //获得 lay-event 对应的值
+                if(layEvent === 'cancelCollect'){
+                    layer.confirm('取消收藏么', function(index){
+                        layer.close(index);
+                        //向服务端发送指令
+                        $.post("/delete/cancel.action","noteId="+data.noteId,function(res){
+                            if(res=="success"){
+                                obj.del();
+                            }
+                        },"text")
+                    });
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<form  lay-filter="fm-filter" id="fm" class="layui-form">
+    <input type="hidden" name="noteId"
+           autocomplete="off" class="layui-input">
+
+    <input type="hidden" name="notebookId"
+           autocomplete="off" class="layui-input">
+
+    <input type="hidden" name="userId"
+           autocomplete="off" class="layui-input">
+
+    <input type="hidden" name="nValid"
+           autocomplete="off" class="layui-input">
+
+    <input type="hidden" name="collection"
+           autocomplete="off" class="layui-input">
+
+</form>
+<table id="noteTable" lay-filter="noteFilter">
+    <script type="text/html" id="btnBar">
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="cancelCollect">取消收藏</a>
+        <button style="display:none" lay-submit lay-filter="submitBut" id="submitBut"></button>
+    </script>
+</table>
+</body>
+</html>

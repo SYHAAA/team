@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seecen.dao.FritypeDao">
+  <resultMap id="BaseResultMap" type="com.seecen.pojo.Fritype">
+    <id column="TYPE_ID" jdbcType="DECIMAL" property="typeId" />
+    <result column="TYPE_NAME" jdbcType="VARCHAR" property="typeName" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    TYPE_ID, TYPE_NAME
+  </sql>
+
+  <select id="findname" parameterType="int" resultType="string">
+    select TYPE_NAME from t_friend_type where TYPE_ID = #{id}
+  </select>
+
+</mapper>

@@ -1,0 +1,40 @@
+package com.seecen.dao;
+
+import com.seecen.domain.Clas;
+import com.seecen.domain.User;
+import com.seecen.domain.UserBo;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Set;
+
+@Repository
+public interface UserDao {
+
+    User findByName(String userName);
+
+    void save(User user);
+
+    Set<String> getUserRole(String userName);
+
+    Set<String> getUserPermission(String primaryPrincipal);
+
+    User getByName(String toString);
+
+    List<User> findUser(Integer userId);
+
+    void delUser(int userId);
+
+    void updateUserdata(User user);
+
+    List<User> findUserJ(UserBo userBo);
+
+    //    用户列表分页
+    List<User> list(User user);
+
+    //查找用户类型
+    List<String> findIsAdmin();
+
+    //查找班级id
+    List<Clas> findClassId();
+}

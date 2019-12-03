@@ -1,0 +1,31 @@
+package com.seecen.service;
+
+import com.seecen.domain.Clas;
+import com.seecen.domain.User;
+import com.seecen.domain.UserBo;
+
+import java.util.List;
+
+public interface UserService {
+    int save(User user);
+
+    User login(User user);
+
+    List<User> findUser(Integer userId);
+
+    void delUser(int userId);
+
+    void updateUserdata(User user);
+
+    List<User> findUserJ(UserBo user);
+
+    //    用户列表分页
+    List<User> list(User user, int pageNum, int pageSize);
+
+    //查找用户类型
+    List<String> findIsAdmin();
+
+
+    //查找班级id
+    List<Clas> findClassId();
+}

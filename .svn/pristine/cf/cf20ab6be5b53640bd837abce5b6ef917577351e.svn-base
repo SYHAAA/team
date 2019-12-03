@@ -1,0 +1,39 @@
+package com.seecen.service.impl;
+
+import com.seecen.dao.UserDao;
+import com.seecen.domain.User;
+import com.seecen.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+/**
+ * @PackageName: com.seecen.service.impl
+ * @ClassName: UserServiceimpl
+ * @Description: TODO
+ * @Author: hao
+ * @Date: 2019/10/25 - 9:55
+ * @Version: 1.0
+ **/
+@Service
+public class UserServiceimpl  implements UserService {
+
+   @Autowired
+    private  UserDao  userDao;
+
+    @Override
+    public int save(User user) {
+        User exist =  userDao.findByName(user.getUserName());
+        if(exist == null){
+            userDao.save(user);
+            return 1;
+        }
+            return  0 ;
+    }
+
+    @Override
+    public User login(User user) {
+        User userdata = userDao.findByName(user.getUserName());
+        return userdata;
+
+    }
+}

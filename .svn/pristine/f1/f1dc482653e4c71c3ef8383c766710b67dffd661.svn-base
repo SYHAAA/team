@@ -1,0 +1,19 @@
+package com.seecen.dao;
+
+import com.seecen.domain.User;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Set;
+
+@Repository
+public interface IUserDao {
+
+    Set<String> getUserRole(String userName);
+
+    Set<String> getUserPermission(String primaryPrincipal);
+
+    User getByName(String toString);
+
+    List<User> findUser(Integer userId);
+}

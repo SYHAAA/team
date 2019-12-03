@@ -1,0 +1,20 @@
+package com.seecen.service;
+
+import com.seecen.domain.User;
+import com.seecen.domain.UserBo;
+
+import java.util.List;
+
+public interface UserService {
+    int save(User user);
+
+    User login(User user);
+
+    List<User> findUser(Integer userId);
+
+    void delUser(int userId);
+
+    void updateUserdata(User user);
+
+    List<User> findUserJ(UserBo user);
+}
